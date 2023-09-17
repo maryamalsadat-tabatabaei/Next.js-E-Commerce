@@ -33,3 +33,11 @@ export const getProducts = async (
     products,
   });
 };
+
+export const getProduct = async (req: NextApiRequest, res: NextApiResponse) => {
+  const productId = req.query.id as string;
+  const product = await ProductModel.findById(productId);
+  if (!product) res.status(404).json({ erro: "Product not found" });
+
+  res.status(200).json({ product });
+};
