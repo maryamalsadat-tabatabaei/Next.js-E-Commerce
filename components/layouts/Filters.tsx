@@ -1,21 +1,76 @@
 "use client";
 import StarRatings from "react-star-ratings";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { getPriceQueryParams } from "@/helpers/priceQuery";
 
 const Filters = () => {
-  //   let queryParams;
+  const router = useRouter();
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
+  const categories = [
+    "Fiction",
+    "Biography/Autobiography",
+    "Science",
+    "Fantasy",
+    "Psychology",
+    "Self-Help",
+    "Mystery/Thriller",
+    "Romance",
+    "History",
+  ];
 
-  //   function checkHandler(checkBoxType, checkBoxValue) {
-  //     if (typeof window !== "undefined") {
-  //       queryParams = new URLSearchParams(window.location.search);
-  //     }
+  const clickHandler = (target: EventTarget) => {
+    const checkbox = target as HTMLInputElement;
 
-  //     if (typeof window !== "undefined") {
-  //       const value = queryParams.get(checkBoxType);
-  //       if (checkBoxValue === value) return true;
-  //       return false;
-  //     }
-  //   }
+    if (typeof window !== "undefined") {
+      const queryParams = new URLSearchParams(window.location.search);
+      const checkboxes = document.getElementsByName(checkbox.name);
 
+      checkboxes.forEach((item) => {
+        if (item !== checkbox) (item as HTMLInputElement).checked = false;
+      });
+
+      if (!checkbox.checked) {
+        queryParams.delete(checkbox.name);
+      } else {
+        if (queryParams.has(checkbox.name)) {
+          queryParams.set(checkbox.name, checkbox.value);
+        } else {
+          queryParams.append(checkbox.name, checkbox.value);
+        }
+      }
+
+      const path = window.location.pathname + "?" + queryParams.toString();
+      router.push(path);
+    }
+  };
+
+  const checkHandler = (
+    checkBoxType: string,
+    checkBoxValue: string
+  ): boolean => {
+    if (typeof window !== "undefined") {
+      const queryParams = new URLSearchParams(window.location.search);
+
+      const value = queryParams.get(checkBoxType);
+      if (checkBoxValue === value) return true;
+      return false;
+    }
+
+    return false;
+  };
+  const priceButtonClickHandler = () => {
+    if (typeof window !== "undefined") {
+      let queryParams = new URLSearchParams(window.location.search);
+
+      queryParams = getPriceQueryParams(queryParams, "minPrice", minPrice);
+      queryParams = getPriceQueryParams(queryParams, "maxPrice", maxPrice);
+
+      const path = window.location.pathname + "?" + queryParams.toString();
+      router.push(path);
+    }
+  };
   return (
     <aside className="md:w-1/3 lg:w-1/4 px-4">
       <a
@@ -29,24 +84,31 @@ const Filters = () => {
         <div className="grid md:grid-cols-3 gap-x-2">
           <div className="mb-4">
             <input
-              name="min"
+              name="minPrice"
               className="appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
               type="number"
-              placeholder="Min"
+              placeholder="Min Price"
+              value={minPrice}
+              onChange={(e) => setMinPrice(e.target.value)}
             />
           </div>
 
           <div className="mb-4">
             <input
-              name="max"
+              name="maxPrice"
               className="appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
               type="number"
-              placeholder="Max"
+              placeholder="Max Price"
+              value={maxPrice}
+              onChange={(e) => setMaxPrice(e.target.value)}
             />
           </div>
 
           <div className="mb-4">
-            <button className="px-1 py-2 text-center w-full inline-block text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700">
+            <button
+              onClick={priceButtonClickHandler}
+              className="px-1 py-2 text-center w-full inline-block text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700"
+            >
               Go
             </button>
           </div>
@@ -57,66 +119,21 @@ const Filters = () => {
         <h3 className="font-semibold mb-2">Category</h3>
 
         <ul className="space-y-1">
-          <li>
-            <label className="flex items-center">
-              <input
-                name="category"
-                type="checkbox"
-                value="Electronics"
-                className="h-4 w-4"
-                // defaultChecked={checkHandler("category", "Electronics")}
-              />
-              <span className="ml-2 text-gray-500"> Electronics </span>
-            </label>
-          </li>
-          <li>
-            <label className="flex items-center">
-              <input
-                name="category"
-                type="checkbox"
-                value="Laptops"
-                className="h-4 w-4"
-                // defaultChecked={checkHandler("category", "Laptops")}
-              />
-              <span className="ml-2 text-gray-500"> Laptops </span>
-            </label>
-          </li>
-          <li>
-            <label className="flex items-center">
-              <input
-                name="category"
-                type="checkbox"
-                value="Toys"
-                className="h-4 w-4"
-                // defaultChecked={checkHandler("category", "Toys")}
-              />
-              <span className="ml-2 text-gray-500"> Toys </span>
-            </label>
-          </li>
-          <li>
-            <label className="flex items-center">
-              <input
-                name="category"
-                type="checkbox"
-                value="Office"
-                className="h-4 w-4"
-                // defaultChecked={checkHandler("category", "Office")}
-              />
-              <span className="ml-2 text-gray-500"> Office </span>
-            </label>
-          </li>
-          <li>
-            <label className="flex items-center">
-              <input
-                name="category"
-                type="checkbox"
-                value="Beauty"
-                className="h-4 w-4"
-                // defaultChecked={checkHandler("category", "Beauty")}
-              />
-              <span className="ml-2 text-gray-500"> Beauty </span>
-            </label>
-          </li>
+          {categories.map((category) => (
+            <li key={category}>
+              <label className="flex items-center">
+                <input
+                  name="category"
+                  type="checkbox"
+                  value={category}
+                  className="h-4 w-4"
+                  defaultChecked={checkHandler("category", category)}
+                  onClick={(e) => clickHandler(e.target)}
+                />
+                <span className="ml-2 text-gray-500"> {category}</span>
+              </label>
+            </li>
+          ))}
         </ul>
 
         <hr className="my-4" />
@@ -131,13 +148,14 @@ const Filters = () => {
                   type="checkbox"
                   value={rating}
                   className="h-4 w-4"
-                  //   defaultChecked={checkHandler("ratings", `${rating}`)}
+                  defaultChecked={checkHandler("ratings", `${rating}`)}
+                  onClick={(e) => clickHandler(e.target)}
                 />
                 <span className="ml-2 text-gray-500">
                   <StarRatings
-                    rating={5}
+                    rating={rating}
                     starRatedColor="#ffb829"
-                    numberOfStars={5}
+                    numberOfStars={rating}
                     starDimension="20px"
                     starSpacing="2px"
                     name="rating"

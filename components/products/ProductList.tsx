@@ -2,12 +2,17 @@
 import ProductItem from "./ProductItem";
 import Filters from "../layouts/Filters";
 import Product from "@/lib/interfaces/product";
+import CustomPagination from "../layouts/Pagination";
 
 interface Products {
   products: Product[];
+  productsCount: number;
+  numberPerPage: number;
+  currentPage: number;
+  totalPages: number;
+  filteredProductsCount: number;
 }
 export default function ProductList({ data }: { data: Products }) {
-  console.log("data", data);
   return (
     // <main className="flex min-h-screen flex-col items-center justify-between p-24">
     <section className="py-12">
@@ -15,11 +20,21 @@ export default function ProductList({ data }: { data: Products }) {
         <div className="flex flex-col md:flex-row -mx-4">
           <Filters />
           <main className="md:w-2/3 lg:w-3/4 px-3">
-            {data?.products?.map((product) => (
-              <ProductItem key={product?._id} product={product} />
-            ))}
+            {data?.products?.length !== 0 ? (
+              data?.products?.map((product) => (
+                <ProductItem key={product?._id} product={product} />
+              ))
+            ) : (
+              <main className="flex min-h-screen text-lg font-semibold flex-col items-center justify-between p-24">
+                No product found
+              </main>
+            )}
           </main>
         </div>
+        <CustomPagination
+          numberPerPage={data?.numberPerPage}
+          filteredProductsCount={data?.filteredProductsCount}
+        />
       </div>
     </section>
     // </main>

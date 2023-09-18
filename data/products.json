@@ -94,5 +94,189 @@
     "ratings": 2,
     "author": "J.K.Rolling",
     "publisher": "Adams"
+  },
+  {
+    "name": "Beyond the Horizon",
+    "price": 29.99,
+    "description": "A gripping science fiction saga that takes you on an intergalactic journey filled with complex characters and unforeseen twists. Brace yourself for a mind-bending adventure.",
+    "category": "Science",
+    "seller": "Cosmic Press",
+    "stock": 12,
+    "images": [
+      {
+        "public_id": "buyitnow/products/yctoxcyf8qgre4uoobnv",
+        "url": "http://res.cloudinary.com/shopitnow-udemy/image/upload/v1674393951/buyitnow/products/yctoxcyf8qgre4uoobnv.jpg"
+      },
+      {
+        "public_id": "buyitnow/products/wbrj0ivayqajozzkeb51",
+        "url": "http://res.cloudinary.com/shopitnow-udemy/image/upload/v1674393954/buyitnow/products/wbrj0ivayqajozzkeb51.jpg"
+      }
+    ],
+    "reviews": [],
+    "ratings": 4.7,
+    "author": "Dr. Samuel Reynolds",
+    "publisher": "Cosmic Press"
+  },
+  {
+    "name": "Unraveling the Mind",
+    "price": 34.99,
+    "description": "Delve into the fascinating world of psychology and unravel the complexities of the human mind. This book offers a comprehensive exploration of psychological phenomena.",
+    "category": "Psychology",
+    "seller": "Insightful Books",
+    "stock": 5,
+    "images": [
+      {
+        "public_id": "buyitnow/products/yctoxcyf8qgre4uoobnv",
+        "url": "http://res.cloudinary.com/shopitnow-udemy/image/upload/v1674393951/buyitnow/products/yctoxcyf8qgre4uoobnv.jpg"
+      },
+      {
+        "public_id": "buyitnow/products/wbrj0ivayqajozzkeb51",
+        "url": "http://res.cloudinary.com/shopitnow-udemy/image/upload/v1674393954/buyitnow/products/wbrj0ivayqajozzkeb51.jpg"
+      }
+    ],
+    "reviews": [],
+    "ratings": 4.9,
+    "author": "Dr. Evelyn Patterson",
+    "publisher": "Insightful Books"
+  },
+  {
+    "name": "Whispers in the Shadows",
+    "price": 24.99,
+    "description": "A thrilling mystery that will keep you on the edge of your seat. Follow the enigmatic detective as he unravels a web of secrets and deception in a quaint English village.",
+    "category": "Mystery/Thriller",
+    "seller": "Ravenwood Publications",
+    "stock": 7,
+    "images": [
+      {
+        "public_id": "buyitnow/products/gclqht0hjco0jyy9s2bx",
+        "url": "http://res.cloudinary.com/shopitnow-udemy/image/upload/v1674393848/buyitnow/products/gclqht0hjco0jyy9s2bx.jpg"
+      },
+      {
+        "public_id": "buyitnow/products/qdilqh5oizvnwfu2bkzq",
+        "url": "http://res.cloudinary.com/shopitnow-udemy/image/upload/v1674393852/buyitnow/products/qdilqh5oizvnwfu2bkzq.jpg"
+      },
+      {
+        "public_id": "buyitnow/products/cjtvzn5crbcyddo2hlai",
+        "url": "http://res.cloudinary.com/shopitnow-udemy/image/upload/v1674393855/buyitnow/products/cjtvzn5crbcyddo2hlai.jpg"
+      }
+    ],
+    "reviews": [],
+    "ratings": 4.5,
+    "author": "James Anderson",
+    "publisher": "Ravenwood Publications"
+  },
+  {
+    "name": "In Pursuit of Truth",
+    "price": 26.99,
+    "description": "A gripping biography that chronicles the extraordinary life of a trailblazing scientist. From humble beginnings to groundbreaking discoveries, this is a story of perseverance and triumph.",
+    "category": "Biography/Autobiography",
+    "seller": "Inspired Biographies",
+    "stock": 6,
+    "images": [
+      {
+        "public_id": "buyitnow/products/gclqht0hjco0jyy9s2bx",
+        "url": "http://res.cloudinary.com/shopitnow-udemy/image/upload/v1674393848/buyitnow/products/gclqht0hjco0jyy9s2bx.jpg"
+      },
+      {
+        "public_id": "buyitnow/products/qdilqh5oizvnwfu2bkzq",
+        "url": "http://res.cloudinary.com/shopitnow-udemy/image/upload/v1674393852/buyitnow/products/qdilqh5oizvnwfu2bkzq.jpg"
+      },
+      {
+        "public_id": "buyitnow/products/cjtvzn5crbcyddo2hlai",
+        "url": "http://res.cloudinary.com/shopitnow-udemy/image/upload/v1674393855/buyitnow/products/cjtvzn5crbcyddo2hlai.jpg"
+      }
+    ],
+    "reviews": [],
+    "ratings": 4.7,
+    "author": "Dr. Katherine Turner",
+    "publisher": "Inspired Biographies"
+  },
+  {
+    "name": "Echoes of Antiquity",
+    "price": 31.99,
+    "description": "Journey through the annals of history, from ancient civilizations to modern empires. This meticulously researched book offers a vivid tapestry of human achievements and struggles.",
+    "category": "History",
+    "seller": "Historical Narratives",
+    "stock": 9,
+    "images": [
+      {
+        "public_id": "buyitnow/products/fqxj6dfj5r8s4oaagz0l",
+        "url": "http://res.cloudinary.com/shopitnow-udemy/image/upload/v1674393888/buyitnow/products/fqxj6dfj5r8s4oaagz0l.jpg"
+      },
+      {
+        "public_id": "buyitnow/products/e12y4ylevohb5usvw06x",
+        "url": "http://res.cloudinary.com/shopitnow-udemy/image/upload/v1674393890/buyitnow/products/e12y4ylevohb5usvw06x.jpg"
+      }
+    ],
+    "reviews": [],
+    "ratings": 4.6,
+    "author": "Dr. Robert Thompson",
+    "publisher": "Historical Narratives"
+  },
+  {
+    "name": "Paths to Inner Peace",
+    "price": 18.99,
+    "description": "Discover ancient wisdom and modern practices to cultivate peace within. This self-help guide offers actionable insights and exercises for a more balanced and fulfilled life.",
+    "category": "Self-Help",
+    "seller": "Inner Harmony Books",
+    "stock": 11,
+    "images": [
+      {
+        "public_id": "buyitnow/products/yctoxcyf8qgre4uoobnv",
+        "url": "http://res.cloudinary.com/shopitnow-udemy/image/upload/v1674393951/buyitnow/products/yctoxcyf8qgre4uoobnv.jpg"
+      },
+      {
+        "public_id": "buyitnow/products/wbrj0ivayqajozzkeb51",
+        "url": "http://res.cloudinary.com/shopitnow-udemy/image/upload/v1674393954/buyitnow/products/wbrj0ivayqajozzkeb51.jpg"
+      }
+    ],
+    "reviews": [],
+    "ratings": 4.9,
+    "author": "Lena Roberts",
+    "publisher": "Inner Harmony Books"
+  },
+  {
+    "name": "Stardust Dreams",
+    "price": 23.99,
+    "description": "A captivating fiction that blurs the lines between reality and dreams. Follow the journey of a young artist as she navigates a world filled with magic, love, and self-discovery.",
+    "category": "Fiction",
+    "seller": "Dreamweaver Novels",
+    "stock": 8,
+    "images": [
+      {
+        "public_id": "buyitnow/products/yctoxcyf8qgre4uoobnv",
+        "url": "http://res.cloudinary.com/shopitnow-udemy/image/upload/v1674393951/buyitnow/products/yctoxcyf8qgre4uoobnv.jpg"
+      },
+      {
+        "public_id": "buyitnow/products/wbrj0ivayqajozzkeb51",
+        "url": "http://res.cloudinary.com/shopitnow-udemy/image/upload/v1674393954/buyitnow/products/wbrj0ivayqajozzkeb51.jpg"
+      }
+    ],
+    "reviews": [],
+    "ratings": 4.7,
+    "author": "Emma Turner",
+    "publisher": "Dreamweaver Novels"
+  },
+  {
+    "name": "Infinite Horizons",
+    "price": 27.99,
+    "description": "Embark on a journey through uncharted territories where the boundaries of reality are pushed to their limits. This collection of short stories promises to leave you questioning the nature of existence.",
+    "category": "Science",
+    "seller": "Cosmic Press",
+    "stock": 6,
+    "images": [
+      {
+        "public_id": "buyitnow/products/yctoxcyf8qgre4uoobnv",
+        "url": "http://res.cloudinary.com/shopitnow-udemy/image/upload/v1674393951/buyitnow/products/yctoxcyf8qgre4uoobnv.jpg"
+      },
+      {
+        "public_id": "buyitnow/products/wbrj0ivayqajozzkeb51",
+        "url": "http://res.cloudinary.com/shopitnow-udemy/image/upload/v1674393954/buyitnow/products/wbrj0ivayqajozzkeb51.jpg"
+      }
+    ],
+    "reviews": [],
+    "ratings": 4.8,
+    "author": "Dr. Timothy Mitchell",
+    "publisher": "Cosmic Press"
   }
 ]
