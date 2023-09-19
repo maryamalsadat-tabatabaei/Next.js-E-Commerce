@@ -2,8 +2,12 @@
 import Link from "next/link";
 import Image from "next/image";
 import Search from "@/components/layouts/Search";
+import { CartContext } from "@/context/CartContext";
+import { useContext } from "react";
 
 const Header = () => {
+  const { cart } = useContext(CartContext);
+
   return (
     <header className="bg-white py-2 border-b">
       <div className="container max-w-screen-xl mx-auto px-4">
@@ -27,7 +31,7 @@ const Header = () => {
             >
               <i className="text-gray-400 w-5 fa fa-shopping-cart"></i>
               <span className="hidden lg:inline ml-1">
-                Cart (<b>0</b>)
+                Cart (<b>{cart?.cartItems?.length || 0}</b>)
               </span>
             </Link>
             <Link

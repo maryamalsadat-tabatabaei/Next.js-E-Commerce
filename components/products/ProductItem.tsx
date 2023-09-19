@@ -1,10 +1,24 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import Product from "@/lib/interfaces/product";
+import Product from "@/interfaces/product";
 import StarRatings from "react-star-ratings";
+import { CartContext } from "@/context/CartContext";
+import { useContext } from "react";
 
 const ProductItem = ({ product }: { product: Product }) => {
+  const { addItemToCart } = useContext(CartContext);
+  const addToCartHandler = () => {
+    addItemToCart({
+      productId: product._id,
+      name: product.name,
+      price: product.price,
+      image: product.images[0]?.url,
+      stock: product.stock,
+      seller: product.seller,
+      quantity: 1,
+    });
+  };
   return (
     <article className="border border-gray-200 overflow-hidden bg-white shadow-sm rounded mb-5">
       <div className="flex flex-col md:flex-row">
@@ -66,7 +80,10 @@ const ProductItem = ({ product }: { product: Product }) => {
 
             <p className="text-green-500">Free Shipping</p>
             <div className="my-3">
-              <a className="px-4 py-2 inline-block text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 cursor-pointer">
+              <a
+                onClick={addToCartHandler}
+                className="px-4 py-2 inline-block text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 cursor-pointer"
+              >
                 {" "}
                 Add to Cart{" "}
               </a>

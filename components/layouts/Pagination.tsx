@@ -6,10 +6,10 @@ import Pagination from "react-js-pagination";
 
 const CustomPagination = ({
   numberPerPage,
-  filteredProductsCount,
+  productsCount,
 }: {
   numberPerPage: number;
-  filteredProductsCount: number;
+  productsCount: number;
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -57,7 +57,7 @@ const CustomPagination = ({
       <Pagination
         activePage={page}
         itemsCountPerPage={numberPerPage}
-        totalItemsCount={filteredProductsCount}
+        totalItemsCount={productsCount}
         onChange={handlePageChange}
         pageRangeDisplayed={3}
         nextPageText={"Next >"}

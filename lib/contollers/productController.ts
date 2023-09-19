@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { ProductModel } from "@/lib/models/product";
 import APIFilters from "../utils/APIFilters";
-import Product from "../interfaces/product";
+import Product from "@/interfaces/product";
 
 interface CustomQuery {
   [key: string]: string;
@@ -31,9 +31,9 @@ export const getProducts = async (
 
     const { page, ...filterParams } = req.query;
 
-    if (filterParams) {
-      currentPage = 1;
-    }
+    // if (filterParams) {
+    //   currentPage = 1;
+    // }
 
     const apiFilters = new APIFilters(
       ProductModel.find(),

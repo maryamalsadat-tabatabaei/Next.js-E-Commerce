@@ -1,7 +1,7 @@
 "use client";
 import ProductItem from "./ProductItem";
 import Filters from "../layouts/Filters";
-import Product from "@/lib/interfaces/product";
+import Product from "@/interfaces/product";
 import CustomPagination from "../layouts/Pagination";
 
 interface Products {
@@ -33,7 +33,7 @@ export default function ProductList({ data }: { data: Products }) {
         </div>
         <CustomPagination
           numberPerPage={data?.numberPerPage}
-          filteredProductsCount={data?.filteredProductsCount}
+          productsCount={data?.filteredProductsCount}
         />
       </div>
     </section>
