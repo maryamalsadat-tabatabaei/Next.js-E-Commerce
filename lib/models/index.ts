@@ -1,6 +1,6 @@
-import { Todo } from "@/lib/models/todo";
-import { Product } from "@/lib/models/product";
+import User from "./user";
+import Product from "./product";
 import { getModelForClass } from "@typegoose/typegoose";
 
-export const TodoModel = getModelForClass(Todo);
 export const ProductModel = getModelForClass(Product);
+export const UserModel = getModelForClass(User);

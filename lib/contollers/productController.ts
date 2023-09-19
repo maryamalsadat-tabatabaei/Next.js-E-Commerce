@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { ProductModel } from "@/lib/models/product";
+import { ProductModel } from "../models";
 import APIFilters from "../utils/APIFilters";
 import Product from "@/interfaces/product";
 
@@ -21,8 +21,7 @@ export const createProduct = async (
 
 export const getProducts = async (
   req: NextApiRequest,
-  res: NextApiResponse,
-  next: (error: any) => void
+  res: NextApiResponse
 ) => {
   try {
     const numberPerPage = parseInt(req.query.numPerPage as string, 10) || 2;

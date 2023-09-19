@@ -6,6 +6,7 @@ import CartItem from "@/interfaces/cart";
 
 const CartItem = () => {
   const { cart, deleteItemFromCart, addItemToCart } = useContext(CartContext);
+
   const increaseQty = (cartItem: CartItem) => {
     const newQty = cartItem?.quantity + 1;
     const updateCartItem = { ...cartItem, quantity: newQty };
@@ -13,6 +14,7 @@ const CartItem = () => {
 
     addItemToCart(updateCartItem);
   };
+
   const decreaseQty = (cartItem: CartItem) => {
     const newQty = cartItem?.quantity - 1;
     const updateCartItem = { ...cartItem, quantity: newQty };

@@ -5,14 +5,18 @@ import { useContext } from "react";
 
 const CartTotal = () => {
   const { cart } = useContext(CartContext);
+
   const totalPriceWithoutTax =
     cart?.cartItems?.reduce(
       (acc, item) => acc + item.price * item.quantity,
       0
     ) || 0;
+
   const tax = (totalPriceWithoutTax * 0.15).toFixed(2);
+
   const totalUnits =
     cart?.cartItems?.reduce((acc, item) => acc + item.quantity, 0) || 0;
+
   const totalPriceWithTax = (
     Number(totalPriceWithoutTax) + Number(tax)
   ).toFixed(2);

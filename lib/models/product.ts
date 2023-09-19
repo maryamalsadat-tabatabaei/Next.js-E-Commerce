@@ -1,4 +1,5 @@
-import { prop, getModelForClass } from "@typegoose/typegoose";
+import { prop, getModelForClass, mongoose } from "@typegoose/typegoose";
+import User from "./user";
 import type { Ref } from "@typegoose/typegoose";
 
 class Review {
@@ -10,20 +11,6 @@ class Review {
 
   @prop({ required: true })
   comment!: string;
-
-  @prop({ default: Date.now })
-  createdAt?: Date;
-}
-
-class User {
-  @prop({ required: true })
-  username!: string;
-
-  @prop({ required: true })
-  email!: string;
-
-  @prop({ required: true })
-  password!: string;
 
   @prop({ default: Date.now })
   createdAt?: Date;
@@ -42,7 +29,7 @@ class Product {
   @prop({ required: true })
   price!: number;
 
-  @prop({ _id: false })
+  @prop({ _id: false, type: mongoose.Schema.Types.Mixed })
   images!: {
     public_id?: string;
     url?: string;
@@ -86,8 +73,7 @@ class Product {
   createdAt?: Date;
 }
 
-export const ProductModel = getModelForClass(Product);
-export const UserModel = getModelForClass(User);
+export default Product;
 
 // import mongoose from "mongoose";
 
