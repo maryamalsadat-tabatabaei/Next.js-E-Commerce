@@ -5,6 +5,7 @@ import User from "@/interfaces/user";
 
 export interface AuthContextProps {
   user: User | null;
+  setUser: (newValue: User | null) => void;
   error: string | null;
   loading: { message: string } | null;
   updated: boolean;
@@ -22,13 +23,14 @@ const initialAuthContext = {
   error: "",
   registerUser: (user: User) => {},
   clearErrors: () => {},
+  setUser: () => {},
 };
 
 export const AuthContext = createContext<AuthContextProps>(initialAuthContext);
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(null);
   const [updated, setUpdated] = useState(false);
@@ -58,6 +60,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     <AuthContext.Provider
       value={{
         user,
+        setUser,
         error,
         loading,
         updated,

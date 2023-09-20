@@ -1,5 +1,5 @@
 "use client";
-
+import { SessionProvider } from "next-auth/react";
 import CartProvider from "@/context/CartContext";
 import AuthProvider from "@/context/AuthContext";
 
@@ -12,7 +12,9 @@ export function GlobalProvider({ children }: { children: ReactNode }) {
     <>
       <ToastContainer position="bottom-right" />
       <AuthProvider>
-        <CartProvider>{children}</CartProvider>
+        <CartProvider>
+          <SessionProvider>{children}</SessionProvider>
+        </CartProvider>
       </AuthProvider>
     </>
   );

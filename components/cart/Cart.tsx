@@ -30,7 +30,7 @@ const Cart = () => {
                 <CartTotal />
               </>
             ) : (
-              <p className="flex flex-col gap-4 mx-auto text-base font-semibold ">
+              <div className="flex flex-col gap-4 mx-auto text-base font-semibold ">
                 There is no item in the cart
                 <Link
                   href={"/"}
@@ -38,7 +38,7 @@ const Cart = () => {
                 >
                   Back Home
                 </Link>
-              </p>
+              </div>
             )}
           </div>
         </div>

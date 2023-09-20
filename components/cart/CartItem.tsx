@@ -26,7 +26,7 @@ const CartItem = () => {
   return (
     <article className="border border-gray-200 bg-white shadow-sm rounded mb-5 p-3 lg:p-5">
       {cart?.cartItems?.map((cartItem, index) => (
-        <div>
+        <div key={cartItem.productId}>
           <div className="flex flex-wrap lg:flex-row gap-5 mb-4">
             <div className="w-full lg:w-2/5 xl:w-2/4">
               <figure className="flex leading-5">
@@ -39,14 +39,14 @@ const CartItem = () => {
                   </div>
                 </div>
                 <figcaption className="ml-3">
-                  <p>
+                  <div>
                     <Link
                       href={`product/${cartItem.productId}`}
                       className="hover:text-blue-600"
                     >
                       {cartItem.name}
                     </Link>
-                  </p>
+                  </div>
                   <p className="mt-1 text-gray-400">
                     {" "}
                     Seller: {cartItem.seller}

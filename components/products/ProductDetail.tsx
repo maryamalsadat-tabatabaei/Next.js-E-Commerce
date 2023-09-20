@@ -63,6 +63,7 @@ const ProductDetail = ({ product }: { product: Product }) => {
               <div className="space-x-2 overflow-auto text-center whitespace-nowrap">
                 {product?.images?.map((img) => (
                   <a
+                    key={img.url}
                     className="inline-block border border-gray-200 p-1 rounded-md hover:border-blue-500 cursor-pointer"
                     onClick={() => setImagePreview(img?.url)}
                   >

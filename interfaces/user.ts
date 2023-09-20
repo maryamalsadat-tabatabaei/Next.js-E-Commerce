@@ -10,3 +10,9 @@ interface User {
   createdAt?: Date;
 }
 export default User;
+
+export interface DefaultSessionUser {
+  name?: string | null | undefined;
+  email?: string | null | undefined;
+  image?: string | null | undefined;
+}

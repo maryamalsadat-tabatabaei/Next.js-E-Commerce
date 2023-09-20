@@ -119,8 +119,8 @@ const Filters = () => {
         <h3 className="font-semibold mb-2">Category</h3>
 
         <ul className="space-y-1">
-          {categories.map((category) => (
-            <li key={category}>
+          {categories.map((category, index) => (
+            <li key={index}>
               <label className="flex items-center">
                 <input
                   name="category"

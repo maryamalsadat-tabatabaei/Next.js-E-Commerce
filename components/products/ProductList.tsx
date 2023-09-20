@@ -29,12 +29,12 @@ export default function ProductList({ data }: { data: Products }) {
                 No product found
               </main>
             )}
+            <CustomPagination
+              numberPerPage={data?.numberPerPage}
+              productsCount={data?.filteredProductsCount}
+            />
           </main>
         </div>
-        <CustomPagination
-          numberPerPage={data?.numberPerPage}
-          productsCount={data?.filteredProductsCount}
-        />
       </div>
     </section>
     // </main>
