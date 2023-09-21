@@ -2,6 +2,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { createContext, useState, ReactNode, useContext } from "react";
 import User from "@/interfaces/user";
+import Address from "@/interfaces/address";
 
 export interface AuthContextProps {
   user: User | null;
@@ -11,6 +12,7 @@ export interface AuthContextProps {
   updated: boolean;
   registerUser: (user: User) => void;
   clearErrors: () => void;
+  addNewUserAddress: (address: Address) => void;
 }
 const initialAuthContext = {
   user: {
@@ -24,6 +26,7 @@ const initialAuthContext = {
   registerUser: (user: User) => {},
   clearErrors: () => {},
   setUser: () => {},
+  addNewUserAddress: (address: Address) => {},
 };
 
 export const AuthContext = createContext<AuthContextProps>(initialAuthContext);
@@ -56,6 +59,24 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   const clearErrors = () => {
     setError(null);
   };
+  const addNewUserAddress = async ({ ...address }: Address) => {
+    try {
+      const { data } = await axios.post(
+        `${process.env.API_URL}/api/address`,
+        address
+      );
+      if (data) {
+        router.push("/profile");
+      }
+    } catch (err) {
+      if (axios.isAxiosError(err) && err.response?.data?.message) {
+        const error = err.response.data.message;
+        setError(error);
+      } else {
+        console.error(err);
+      }
+    }
+  };
   return (
     <AuthContext.Provider
       value={{
@@ -66,6 +87,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         updated,
         registerUser,
         clearErrors,
+        addNewUserAddress,
       }}
     >
       {children}

@@ -1,4 +1,5 @@
 interface User {
+  _id?: string;
   name: string;
   email: string;
   password: string;
@@ -10,6 +11,12 @@ interface User {
   createdAt?: Date;
 }
 export default User;
+
+import { NextApiRequest } from "next";
+
+export interface CustomNextApiRequest extends NextApiRequest {
+  user?: User;
+}
 
 export interface DefaultSessionUser {
   name?: string | null | undefined;

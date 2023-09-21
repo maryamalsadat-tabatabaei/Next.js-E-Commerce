@@ -1,19 +1,23 @@
+import dbConnect from "@/lib/config/dbConnect";
+import {
+  createAddress,
+  getAddresses,
+} from "@/lib/contollers/addressController";
+import type { NextApiRequest, NextApiResponse } from "next";
+import { isAuthenticatedUser } from "@/lib/middlewares/requireAuth";
 import { createRouter } from "next-connect";
 import onError from "@/lib/middlewares/error";
-import dbConnect from "@/lib/config/dbConnect";
-import { createProduct, getProducts } from "@/lib/contollers/productController";
-import type { NextApiRequest, NextApiResponse } from "next";
 
 const router = createRouter<NextApiRequest, NextApiResponse>();
 
-router.post(async (req, res) => {
+router.use(isAuthenticatedUser).post(async (req, res) => {
   await dbConnect();
-  createProduct(req, res);
+  createAddress(req, res);
 });
 
-router.get(async (req, res) => {
+router.use(isAuthenticatedUser).get(async (req, res) => {
   await dbConnect();
-  getProducts(req, res);
+  getAddresses(req, res);
 });
 export default router.handler({ onError });
 
@@ -24,13 +28,13 @@ export default router.handler({ onError });
 //   await dbConnect();
 //   if (req.method === "POST") {
 //     try {
-//       createProduct(req, res);
+//       createAddress(req, res);
 //     } catch (error) {
 //       res.status(500).json({ error: "Internal Server Error" });
 //     }
 //   } else if (req.method === "GET") {
 //     try {
-//       getProducts(req, res);
+//       getAddresses(req, res);
 //     } catch (error) {
 //       res.status(500).json({ error: "Internal Server Error" });
 //     }
