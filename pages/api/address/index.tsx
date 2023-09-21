@@ -7,12 +7,13 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { isAuthenticatedUser } from "@/lib/middlewares/requireAuth";
 import { createRouter } from "next-connect";
 import onError from "@/lib/middlewares/error";
+import { CustomNextApiRequest } from "@/interfaces/user";
 
-const router = createRouter<NextApiRequest, NextApiResponse>();
+const router = createRouter<CustomNextApiRequest, NextApiResponse>();
 
 router.use(isAuthenticatedUser).post(async (req, res) => {
   await dbConnect();
-  createAddress(req, res);
+  await createAddress(req, res);
 });
 
 router.use(isAuthenticatedUser).get(async (req, res) => {

@@ -51,8 +51,8 @@ const ProductDetail = ({ product }: { product: Product }) => {
                   className="object-cover inline-block"
                   ref={imageRef}
                   src={
-                    product?.images
-                      ? product?.images[0].url
+                    product?.images[0]
+                      ? product?.images[0]?.url
                       : "/images/default_product.png"
                   }
                   alt={product?.name}

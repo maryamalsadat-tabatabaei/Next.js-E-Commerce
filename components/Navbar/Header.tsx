@@ -5,7 +5,7 @@ import Search from "@/components/layouts/Search";
 import { CartContext } from "@/context/CartContext";
 import { AuthContext } from "@/context/AuthContext";
 import { useContext, useEffect } from "react";
-import { useSession, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import User from "@/interfaces/user";
 
 const Header = () => {

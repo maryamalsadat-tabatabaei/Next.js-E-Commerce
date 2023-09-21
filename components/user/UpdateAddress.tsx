@@ -5,20 +5,33 @@ import Sidebar from "../layouts/Sidebar";
 import { countries } from "countries-list";
 import { Form, Formik, Field } from "formik";
 import validator from "validator";
-import Address, { FormAddress } from "@/interfaces/address";
+import Address from "@/interfaces/address";
 import { AuthContext } from "@/context/AuthContext";
 import { toast } from "react-toastify";
 
 interface Country {
   name: string;
   code: string;
-  // Add other properties as needed
 }
-const AddressForm = () => {
-  const { error, addNewUserAddress, clearErrors } = useContext(AuthContext);
+const UpdateAddress = ({
+  address,
+  addressId,
+}: {
+  address: Address;
+  addressId: string;
+}) => {
+  const {
+    error,
+    addNewUserAddress,
+    clearErrors,
+    updated,
+    setUpdated,
+    updateAddress,
+    deleteAddress,
+  } = useContext(AuthContext);
 
   const countriesList: Country[] = Object.values(countries);
-  const validateForm = (values: FormAddress) => {
+  const validateForm = (values: Address) => {
     const errors: {
       street?: string;
       city?: string;
@@ -56,40 +69,29 @@ const AddressForm = () => {
     ) {
       errors.phoneNo = "Invalid Phone Number - +1XXXXXXXXXX";
     }
-    // if (!values.email) {
-    //   errors.email = "Email is required";
-    // } else if (!validator.isEmail(values.email)) {
-    //   errors.email = "Invalid email street";
-    // }
-
-    // if (!values.password) {
-    //   errors.password = "Password is required";
-    // } else if (!validator.isStrongPassword(values.password)) {
-    //   errors.password =
-    //     "Password must contain one Capital letter, Small Letter, Number & Special symbol";
-    // }
-
-    // if (!values.confirmPassword) {
-    //   errors.confirmPassword = "Confirm password is required";
-    // } else if (values.password !== values.confirmPassword) {
-    //   errors.confirmPassword = "Password does not match";
-    // }
 
     return errors;
   };
 
   useEffect(() => {
+    if (updated) {
+      toast.success("Address Updated");
+      setUpdated(false);
+    }
     if (error) {
       toast.error(error);
       clearErrors();
     }
-  }, [error]);
+  }, [error, updated]);
 
-  const submitHandler = (values: FormAddress) => {
+  const submitHandler = (values: Address) => {
     // e.preventDefault();
 
     console.log("values", values);
-    addNewUserAddress({ ...values });
+    updateAddress(addressId, values);
+  };
+  const deleteHandler = (addressId: string) => {
+    deleteAddress(addressId);
   };
   return (
     <>
@@ -101,12 +103,13 @@ const AddressForm = () => {
             <div className="md:w-2/3 lg:w-3/4 px-4">
               <Formik
                 initialValues={{
-                  city: "",
-                  street: "",
-                  phoneNo: "",
-                  state: "",
-                  zipCode: "",
-                  country: "",
+                  city: address.city,
+                  street: address.street,
+                  phoneNo: address.phoneNo,
+                  state: address.state,
+                  zipCode: address.zipCode,
+                  country: address.country,
+                  user: "",
                 }}
                 validate={validateForm}
                 onSubmit={submitHandler}
@@ -264,12 +267,20 @@ const AddressForm = () => {
                       ) : null}
                     </div>
 
-                    <div className="form-group">
+                    <div className="grid md:grid-cols-2 gap-x-3">
                       <button
                         type="submit"
                         className="my-2 px-4 py-2 text-center w-full inline-block text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700"
                       >
-                        Submit
+                        Update
+                      </button>
+
+                      <button
+                        type="submit"
+                        className="my-2 px-4 py-2 text-center w-full inline-block text-white bg-red-600 border border-transparent rounded-md hover:bg-red-700"
+                        onClick={() => deleteHandler(address?._id as string)}
+                      >
+                        Delete
                       </button>
                     </div>
                   </Form>
@@ -283,4 +294,4 @@ const AddressForm = () => {
   );
 };
 
-export default AddressForm;
+export default UpdateAddress;

@@ -1,11 +1,12 @@
 import Profile from "@/components/auth/Profile";
 import axios from "axios";
-export const metadata = {
-  title: "Address Page",
-};
+
 import { cookies } from "next/headers";
 import { getCookieName } from "@/helpers/getCookieName";
 
+export const metadata = {
+  title: "Address Page",
+};
 const getAddresses = async () => {
   const nextCookies = cookies();
   const cookieName = getCookieName();
