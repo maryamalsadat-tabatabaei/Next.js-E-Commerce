@@ -55,14 +55,13 @@ export const updateAddress = async (
   next: Function
 ) => {
   let address = await AddressModel.findById(req.query.id);
-
   if (!address) {
     return next(new ErrorHandler("Address not found", 404));
   }
 
   address = await AddressModel.findByIdAndUpdate(
     req.query.id,
-    req.body as Address
+    req.body as FormAddress
   );
 
   res.status(200).json({
@@ -76,12 +75,14 @@ export const deleteAddress = async (
   next: Function
 ) => {
   let address = await AddressModel.findById(req.query.id);
+  console.log("address", address);
 
   if (!address) {
     return next(new ErrorHandler("Address not found", 404));
   }
 
   await address.deleteOne();
+  // await address.remove();
 
   res.status(200).json({
     success: true,

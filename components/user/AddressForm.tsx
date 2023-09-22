@@ -15,7 +15,8 @@ interface Country {
   // Add other properties as needed
 }
 const AddressForm = () => {
-  const { error, addNewUserAddress, clearErrors } = useContext(AuthContext);
+  const { error, addNewUserAddress, clearErrors, setUpdated, updated } =
+    useContext(AuthContext);
 
   const countriesList: Country[] = Object.values(countries);
   const validateForm = (values: FormAddress) => {
@@ -79,11 +80,15 @@ const AddressForm = () => {
   };
 
   useEffect(() => {
+    if (updated) {
+      toast.success("Address created successfully.");
+      setUpdated(false);
+    }
     if (error) {
       toast.error(error);
       clearErrors();
     }
-  }, [error]);
+  }, [error, updated]);
 
   const submitHandler = (values: FormAddress) => {
     // e.preventDefault();
@@ -91,9 +96,23 @@ const AddressForm = () => {
     console.log("values", values);
     addNewUserAddress({ ...values });
   };
+  const breadCrumbList = [
+    {
+      name: "Home",
+      url: "/",
+    },
+    {
+      name: "Profile",
+      url: "/profile",
+    },
+    {
+      name: "New address",
+      url: "/address/new",
+    },
+  ];
   return (
     <>
-      {/* <BreadCrumbs /> */}
+      <BreadCrumbs breadCrumbList={breadCrumbList} />
       <section className="py-10">
         <div className="container max-w-screen-xl mx-auto px-4">
           <div className="flex flex-col md:flex-row -mx-4">

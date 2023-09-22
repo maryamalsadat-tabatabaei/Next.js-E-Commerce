@@ -8,9 +8,11 @@ export interface AuthContextProps {
   user: User | null;
   setUser: (newValue: User | null) => void;
   setUpdated: (newValue: boolean) => void;
+  setDeleted: (newValue: boolean) => void;
   error: string | null;
   loading: { message: string } | null;
   updated: boolean;
+  deleted: boolean;
   registerUser: (user: User) => void;
   clearErrors: () => void;
   addNewUserAddress: (address: FormAddress) => void;
@@ -24,12 +26,14 @@ const initialAuthContext = {
     password: "",
   },
   updated: false,
+  deleted: false,
   loading: { message: "" },
   error: "",
   registerUser: (user: User) => {},
   clearErrors: () => {},
   setUser: () => {},
   setUpdated: () => false,
+  setDeleted: () => false,
   addNewUserAddress: (address: FormAddress) => {},
   updateAddress: (addressId: string, address: FormAddress) => {},
   deleteAddress: (addressId: string) => {},
@@ -43,6 +47,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(null);
   const [updated, setUpdated] = useState<boolean>(false);
+  const [deleted, setDeleted] = useState<boolean>(false);
   const registerUser = async ({ ...user }: User) => {
     try {
       const { data } = await axios.post(
@@ -72,6 +77,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         address
       );
       if (data) {
+        setUpdated(true);
         router.push("/profile");
       }
     } catch (err) {
@@ -92,7 +98,8 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       if (data?.address) {
         setUpdated(true);
-        router.replace(`/address/${addressId}`);
+        // router.replace(`/address/${addressId}`);
+        router.push("/profile");
       }
     } catch (err) {
       if (axios.isAxiosError(err) && err.response?.data?.message) {
@@ -108,7 +115,8 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
       const { data } = await axios.delete(
         `${process.env.API_URL}/api/address/${addressId}`
       );
-      if (data?.sucsess) {
+      if (data?.success) {
+        setDeleted(true);
         router.push("/profile");
       }
     } catch (err) {
@@ -137,6 +145,8 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         // deleteUser,
         updateAddress,
         deleteAddress,
+        deleted,
+        setDeleted,
         clearErrors,
       }}
     >

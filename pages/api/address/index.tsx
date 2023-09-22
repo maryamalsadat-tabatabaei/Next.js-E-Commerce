@@ -13,7 +13,7 @@ const router = createRouter<CustomNextApiRequest, NextApiResponse>();
 
 router.use(isAuthenticatedUser).post(async (req, res) => {
   await dbConnect();
-  await createAddress(req, res);
+  createAddress(req, res);
 });
 
 router.use(isAuthenticatedUser).get(async (req, res) => {

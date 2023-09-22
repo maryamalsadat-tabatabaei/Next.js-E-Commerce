@@ -14,15 +14,15 @@ const router = createRouter<CustomNextApiRequest, NextApiResponse>();
 
 router.use(isAuthenticatedUser).get(async (req, res, next) => {
   await dbConnect();
-  getAddress(req, res, next);
+  await getAddress(req, res, next);
 });
 
 router.use(isAuthenticatedUser).put(async (req, res, next) => {
   await dbConnect();
-  updateAddress(req, res, next);
+  await updateAddress(req, res, next);
 });
 router.use(isAuthenticatedUser).delete(async (req, res, next) => {
   await dbConnect();
-  deleteAddress(req, res, next);
+  await deleteAddress(req, res, next);
 });
 export default router.handler({ onError });

@@ -5,7 +5,7 @@ import Sidebar from "../layouts/Sidebar";
 import { countries } from "countries-list";
 import { Form, Formik, Field } from "formik";
 import validator from "validator";
-import Address from "@/interfaces/address";
+import Address, { FormAddress } from "@/interfaces/address";
 import { AuthContext } from "@/context/AuthContext";
 import { toast } from "react-toastify";
 
@@ -22,7 +22,8 @@ const UpdateAddress = ({
 }) => {
   const {
     error,
-    addNewUserAddress,
+    deleted,
+    setDeleted,
     clearErrors,
     updated,
     setUpdated,
@@ -31,7 +32,7 @@ const UpdateAddress = ({
   } = useContext(AuthContext);
 
   const countriesList: Country[] = Object.values(countries);
-  const validateForm = (values: Address) => {
+  const validateForm = (values: FormAddress) => {
     const errors: {
       street?: string;
       city?: string;
@@ -78,24 +79,41 @@ const UpdateAddress = ({
       toast.success("Address Updated");
       setUpdated(false);
     }
+    if (deleted) {
+      toast.warn("Address Deleted");
+      setDeleted(false);
+    }
     if (error) {
       toast.error(error);
       clearErrors();
     }
-  }, [error, updated]);
+  }, [error, updated, deleted]);
 
-  const submitHandler = (values: Address) => {
+  const submitHandler = (values: FormAddress) => {
     // e.preventDefault();
 
-    console.log("values", values);
     updateAddress(addressId, values);
   };
   const deleteHandler = (addressId: string) => {
     deleteAddress(addressId);
   };
+  const breadCrumbList = [
+    {
+      name: "Home",
+      url: "/",
+    },
+    {
+      name: "Profile",
+      url: "/profile",
+    },
+    {
+      name: `${address?.street?.substring(0, 10)}...`,
+      url: `/address/${addressId}`,
+    },
+  ];
   return (
     <>
-      {/* <BreadCrumbs /> */}
+      <BreadCrumbs breadCrumbList={breadCrumbList} />
       <section className="py-10">
         <div className="container max-w-screen-xl mx-auto px-4">
           <div className="flex flex-col md:flex-row -mx-4">
@@ -109,7 +127,6 @@ const UpdateAddress = ({
                   state: address.state,
                   zipCode: address.zipCode,
                   country: address.country,
-                  user: "",
                 }}
                 validate={validateForm}
                 onSubmit={submitHandler}
@@ -120,7 +137,7 @@ const UpdateAddress = ({
                     className="mt-1 mb-20 p-4 md:p-7 mx-auto rounded bg-white shadow-lg"
                   >
                     <h2 className="mb-5 text-2xl font-semibold">
-                      Add new address
+                      Update/ Delete address
                     </h2>
                     <div className="mb-4 md:col-span-2">
                       <label className="block mb-1" htmlFor="street">
@@ -278,7 +295,7 @@ const UpdateAddress = ({
                       <button
                         type="submit"
                         className="my-2 px-4 py-2 text-center w-full inline-block text-white bg-red-600 border border-transparent rounded-md hover:bg-red-700"
-                        onClick={() => deleteHandler(address?._id as string)}
+                        onClick={() => deleteHandler(addressId)}
                       >
                         Delete
                       </button>
