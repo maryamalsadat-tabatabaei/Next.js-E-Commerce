@@ -4,7 +4,7 @@ import { CartContext } from "@/context/CartContext";
 import { useContext } from "react";
 
 const CartTotal = () => {
-  const { cart } = useContext(CartContext);
+  const { cart, saveOnCheckout } = useContext(CartContext);
 
   const totalPriceWithoutTax =
     cart?.cartItems?.reduce(
@@ -21,6 +21,15 @@ const CartTotal = () => {
     Number(totalPriceWithoutTax) + Number(tax)
   ).toFixed(2);
 
+  const checkoutHandler = () => {
+    const checkoutInfo = {
+      amount: totalPriceWithoutTax,
+      totalAmount: Number(totalPriceWithTax),
+      tax: Number(tax),
+      totalUnits,
+    };
+    saveOnCheckout(checkoutInfo);
+  };
   return (
     <aside className="md:w-1/4">
       <article className="border border-gray-200 bg-white shadow-sm rounded mb-5 p-3 lg:p-5">
@@ -43,7 +52,10 @@ const CartTotal = () => {
           </li>
         </ul>
 
-        <a className="px-4 py-3 mb-2 inline-block text-lg w-full text-center font-medium text-white bg-green-600 border border-transparent rounded-md hover:bg-green-700 cursor-pointer">
+        <a
+          onClick={checkoutHandler}
+          className="px-4 py-3 mb-2 inline-block text-lg w-full text-center font-medium text-white bg-green-600 border border-transparent rounded-md hover:bg-green-700 cursor-pointer"
+        >
           Continue
         </a>
 

@@ -1,4 +1,4 @@
-interface CartItem {
+export type CartItem = {
   productId: string;
   name: string;
   price: number;
@@ -6,6 +6,11 @@ interface CartItem {
   seller: string;
   stock: number;
   quantity: number;
-}
+};
 
-export default CartItem;
+export type CheckoutInformation = {
+  amount: number;
+  totalAmount: number;
+  tax: number;
+  totalUnits: number;
+};

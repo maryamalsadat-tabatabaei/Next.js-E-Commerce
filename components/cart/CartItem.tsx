@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { CartContext } from "@/context/CartContext";
 import { useContext } from "react";
-import CartItem from "@/interfaces/cart";
+import { CartItem } from "@/interfaces/cart";
 
 const CartItem = () => {
   const { cart, deleteItemFromCart, addItemToCart } = useContext(CartContext);

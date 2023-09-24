@@ -1,3 +1,4 @@
+"use client";
 import {
   createContext,
   useState,
@@ -5,24 +6,28 @@ import {
   ReactNode,
   useContext,
 } from "react";
-import CartItem from "@/interfaces/cart";
+import { CheckoutInformation, CartItem } from "@/interfaces/cart";
+import { useRouter } from "next/navigation";
 
 export interface CartContextProps {
-  cart: { cartItems?: CartItem[] };
+  cart: { cartItems?: CartItem[]; checkoutInfo?: CheckoutInformation };
   addItemToCart: (product: CartItem) => void;
   deleteItemFromCart: (productId: string) => void;
   clearCart: () => void;
+  saveOnCheckout: (checkoutInfo: CheckoutInformation) => void;
 }
 const initialCartContext = {
   cart: { cartItems: [] },
   addItemToCart: (product: CartItem) => {},
   deleteItemFromCart: (productId: string) => {},
   clearCart: () => {},
+  saveOnCheckout: (checkoutInfo: CheckoutInformation) => {},
 };
 // export const CartContext = createContext<CartContextProps | null>(null);
 export const CartContext = createContext<CartContextProps>(initialCartContext);
 
 const CartProvider = ({ children }: { children: ReactNode }) => {
+  const router = useRouter();
   const [cart, setCart] = useState<{ cartItems?: CartItem[] }>({
     cartItems: [],
   });
@@ -64,6 +69,12 @@ const CartProvider = ({ children }: { children: ReactNode }) => {
     );
     setCartFromStorageToState();
   };
+  const saveOnCheckout = (checkoutInfo: CheckoutInformation) => {
+    const newCart = { ...cart, checkoutInfo };
+    localStorage.setItem("cart", JSON.stringify(newCart));
+    setCartFromStorageToState();
+    router.push("/shipping");
+  };
   const clearCart = () => {
     localStorage.removeItem("cart");
     setCartFromStorageToState();
@@ -75,6 +86,7 @@ const CartProvider = ({ children }: { children: ReactNode }) => {
         addItemToCart,
         deleteItemFromCart,
         clearCart,
+        saveOnCheckout,
       }}
     >
       {children}
