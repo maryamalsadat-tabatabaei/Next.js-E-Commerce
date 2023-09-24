@@ -37,3 +37,9 @@ export interface DefaultSessionUser {
     createdAt?: Date;
   };
 }
+
+export interface UpdatePasswordForm {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}

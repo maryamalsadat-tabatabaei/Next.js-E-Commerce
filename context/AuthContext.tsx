@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { createContext, useState, ReactNode, useContext } from "react";
-import User from "@/interfaces/user";
+import User, { UpdatePasswordForm } from "@/interfaces/user";
 import { FormAddress } from "@/interfaces/address";
 
 export interface AuthContextProps {
@@ -16,6 +16,7 @@ export interface AuthContextProps {
   registerUser: (user: User) => void;
   clearErrors: () => void;
   addNewUserAddress: (address: FormAddress) => void;
+  updatePassword: (formPassword: UpdatePasswordForm) => void;
   updateAddress: (addressId: string, address: FormAddress) => void;
   deleteAddress: (addressId: string) => void;
   updateProfile: (formData: FormData) => void;
@@ -36,6 +37,7 @@ const initialAuthContext = {
   setUpdated: () => false,
   setDeleted: () => false,
   addNewUserAddress: (address: FormAddress) => {},
+  updatePassword: (formPassword: UpdatePasswordForm) => {},
   updateAddress: (addressId: string, address: FormAddress) => {},
   deleteAddress: (addressId: string) => {},
   updateProfile: (formData: FormData) => {},
@@ -113,7 +115,25 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
     }
   };
-
+  const updatePassword = async ({ ...formPassword }: UpdatePasswordForm) => {
+    try {
+      const { data } = await axios.put(
+        `${process.env.API_URL}/api/auth/profile/update-password`,
+        formPassword
+      );
+      if (data?.success) {
+        setUpdated(true);
+        router.replace("/profile");
+      }
+    } catch (err) {
+      if (axios.isAxiosError(err) && err.response?.data?.message) {
+        const error = err.response.data.message;
+        setError(error);
+      } else {
+        console.error(err);
+      }
+    }
+  };
   const clearErrors = () => {
     setError(null);
   };
@@ -187,7 +207,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUser,
         registerUser,
         updateProfile,
-        // updatePassword,
+        updatePassword,
         // updateUser,
         // deleteUser,
         updateAddress,

@@ -1,9 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { UserModel } from "../models";
-import User from "@/interfaces/user";
+import User, { UpdatePasswordForm } from "@/interfaces/user";
 import { uploads } from "../utils/cloudinary";
 import { CustomNextApiRequest } from "@/interfaces/user";
 import fs from "fs";
+import ErrorHandler from "../utils/errorHandler";
+import bcrypt from "bcryptjs";
 
 export const registerUser = async (
   req: CustomNextApiRequest,
@@ -55,47 +57,36 @@ export const updateProfile = async (req: any, res: any) => {
   }
 };
 
-// import upload from "../utils/multer";
-// import { Express } from "express";
+export const updatePassword = async (
+  req: CustomNextApiRequest,
+  res: NextApiResponse,
+  next: any
+) => {
+  const userBody = req.body as UpdatePasswordForm;
+  const user = await UserModel.findById(req.user?._id).select("+password");
 
-// interface MulterFile {
-//   fieldname: string;
-//   originalname: string;
-//   encoding: string;
-//   mimetype: string;
-//   size: number;
-//   destination: string;
-//   filename: string;
-//   path: string;
-//   buffer: Buffer;
-// }
+  if (user) {
+    const isPasswordMatched = await bcrypt.compare(
+      userBody.currentPassword,
+      user.password
+    );
 
-// interface MulterRequest extends NextApiRequest {
-//   files: MulterFile[];
-// }
+    if (!isPasswordMatched) {
+      return next(new ErrorHandler("Old password is incorrect", 400));
+    }
+    if (userBody.newPassword !== userBody.confirmPassword) {
+      return next(
+        new ErrorHandler("New assword and confirm password does not match", 400)
+      );
+    }
 
-// let uploader = upload.array("images");
+    user.password = userBody.newPassword;
+    await user.save();
+  } else {
+    throw new Error("Invalid user");
+  }
 
-// const POST = async (request: NextApiRequest, response: NextApiResponse) => {
-//   try {
-//     await connect();
-//     uploader(request as any, response as any, async function (err) {
-//       if (err) {
-//         return new NextResponse("Fehler beim Hochladen der Bilder", {
-//           status: 400,
-//         });
-//       }
-//       const data = (request as MulterRequest).body;
-//       data.images = (request as MulterRequest).files.map(
-//         (file) => file.filename
-//       );
-//       const newBlogPost = new BlogPost(data);
-//       await newBlogPost.save();
-//       return new NextResponse(JSON.stringify(newBlogPost), { status: 201 });
-//     });
-//   } catch (error) {
-//     return new NextResponse("Fehler beim Erstellen des BlogPosts", {
-//       status: 400,
-//     });
-//   }
-// };
+  res.status(200).json({
+    success: true,
+  });
+};
