@@ -6,23 +6,23 @@ import {
   FormEvent,
   ChangeEvent,
 } from "react";
-import AuthContext from "@/context/AuthContext";
+import { AuthContext } from "@/context/AuthContext";
 import { toast } from "react-toastify";
 
 interface State {
   name: string;
   email: string;
-  avatar: string;
-  avatarPreview: string | ArrayBuffer | null;
+  avatar: Blob | string;
+  avatarPreview: string;
 }
 
 type Action =
   | { type: "SET_NAME"; payload: string }
   | { type: "SET_EMAIL"; payload: string }
-  | { type: "SET_AVATAR"; payload: string }
+  | { type: "SET_AVATAR"; payload: Blob | string }
   | {
       type: "SET_AVATAR_PREVIEW";
-      payload: string | ArrayBuffer | null;
+      payload: string;
     };
 
 const initialState: State = {
@@ -55,6 +55,12 @@ const UpdateProfile = () => {
     if (user) {
       dispatch({ type: "SET_EMAIL", payload: user.email });
       dispatch({ type: "SET_NAME", payload: user.name });
+      dispatch({
+        type: "SET_AVATAR_PREVIEW",
+        payload: user?.avatar
+          ? (user?.avatar?.url as string)
+          : "/images/default.png",
+      });
     }
 
     if (error) {
@@ -66,9 +72,12 @@ const UpdateProfile = () => {
     e.preventDefault();
 
     const formData = new FormData();
+    // Object.entries(data).forEach(([key, value]) => {
+    //   formData.set(key, value);
+    // });
     formData.set("name", state.name);
     formData.set("email", state.email);
-    formData.set("image", state.avatar);
+    formData.append("image", state.avatar as File);
 
     updateProfile(formData);
   };
@@ -78,11 +87,14 @@ const UpdateProfile = () => {
 
     reader.onload = () => {
       if (reader.readyState === 2) {
-        dispatch({ type: "SET_AVATAR_PREVIEW", payload: reader?.result });
+        dispatch({
+          type: "SET_AVATAR_PREVIEW",
+          payload: reader?.result as string,
+        });
       }
     };
 
-    dispatch({ type: "SET_AVATAR", payload: e.target?.files?.[0] });
+    dispatch({ type: "SET_AVATAR", payload: e.target?.files?.[0] as File });
 
     if (e.target?.files?.[0]) {
       reader.readAsDataURL(e.target.files[0] as Blob);
@@ -132,7 +144,7 @@ const UpdateProfile = () => {
               <div className="flex items-center mb-4 space-x-3 mt-4 cursor-pointer md:w-1/5 lg:w-1/4">
                 <img
                   className="w-14 h-14 rounded-full"
-                  src={state.avatarPreview || "/images/default_avatar.png"}
+                  src={state.avatarPreview || "/images/default.png"}
                 />
               </div>
               <div className="md:w-2/3 lg:w-80">

@@ -1,4 +1,4 @@
-import { v2 as cloudinary, UploadApiResponse } from "cloudinary";
+import { v2 as cloudinary } from "cloudinary";
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -6,26 +6,25 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-interface UploadResult {
-  public_id: string;
-  url: string;
-}
-
-const uploads = (file: string, folder: string): Promise<UploadResult> => {
+const uploads = (
+  file: string,
+  folder: string
+): Promise<{ public_id: string; url: string }> => {
   return new Promise((resolve, reject) => {
-    cloudinary.uploader.upload(
-      file,
-      (result: UploadApiResponse) => {
+    cloudinary.uploader
+      .upload(file, {
+        resource_type: "auto",
+        folder: folder,
+      })
+      .then((result) => {
         resolve({
           public_id: result.public_id,
           url: result.url,
         });
-      },
-      {
-        resource_type: "auto",
-        folder: folder,
-      }
-    );
+      })
+      .catch((error) => {
+        reject(error);
+      });
   });
 };
 

@@ -10,7 +10,7 @@ export interface AuthContextProps {
   setUpdated: (newValue: boolean) => void;
   setDeleted: (newValue: boolean) => void;
   error: string | null;
-  loading: { message: string } | null;
+  loading: boolean | null;
   updated: boolean;
   deleted: boolean;
   registerUser: (user: User) => void;
@@ -18,6 +18,7 @@ export interface AuthContextProps {
   addNewUserAddress: (address: FormAddress) => void;
   updateAddress: (addressId: string, address: FormAddress) => void;
   deleteAddress: (addressId: string) => void;
+  updateProfile: (formData: FormData) => void;
 }
 const initialAuthContext = {
   user: {
@@ -27,7 +28,7 @@ const initialAuthContext = {
   },
   updated: false,
   deleted: false,
-  loading: { message: "" },
+  loading: null,
   error: "",
   registerUser: (user: User) => {},
   clearErrors: () => {},
@@ -37,6 +38,7 @@ const initialAuthContext = {
   addNewUserAddress: (address: FormAddress) => {},
   updateAddress: (addressId: string, address: FormAddress) => {},
   deleteAddress: (addressId: string) => {},
+  updateProfile: (formData: FormData) => {},
 };
 
 export const AuthContext = createContext<AuthContextProps>(initialAuthContext);
@@ -45,9 +47,10 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(null);
+  const [loading, setLoading] = useState<boolean | null>(null);
   const [updated, setUpdated] = useState<boolean>(false);
   const [deleted, setDeleted] = useState<boolean>(false);
+
   const registerUser = async ({ ...user }: User) => {
     try {
       const { data } = await axios.post(
@@ -67,6 +70,50 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
     }
   };
+  const loadUser = async () => {
+    try {
+      setLoading(true);
+      const { data } = await axios.get("/api/auth/session?update");
+      if (data?.user) {
+        setUser(data.user);
+        router.replace("/profile");
+      }
+    } catch (err) {
+      if (axios.isAxiosError(err) && err.response?.data?.message) {
+        const error = err.response.data.message;
+        setError(error);
+      } else {
+        console.error(err);
+      }
+    }
+  };
+  const updateProfile = async (formData: FormData) => {
+    try {
+      setLoading(true);
+      const { data } = await axios.put(
+        `${process.env.API_URL}/api/auth/profile/update`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      if (data?.user) {
+        console.log("userrrrrr", data?.user);
+        loadUser();
+        setLoading(false);
+      }
+    } catch (err) {
+      if (axios.isAxiosError(err) && err.response?.data?.message) {
+        const error = err.response.data.message;
+        setError(error);
+      } else {
+        console.error(err);
+      }
+    }
+  };
+
   const clearErrors = () => {
     setError(null);
   };
@@ -139,7 +186,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUpdated,
         setUser,
         registerUser,
-        // updateProfile,
+        updateProfile,
         // updatePassword,
         // updateUser,
         // deleteUser,

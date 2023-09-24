@@ -16,6 +16,7 @@ const isAuthenticatedUser = async (
   if (!session) {
     return next(new ErrorHandler("Login first to access this route", 401));
   }
+
   req.user = session.user as User;
 
   next();
