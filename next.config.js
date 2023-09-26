@@ -13,8 +13,15 @@ const nextConfig = {
     CLOUD_NAME: "dcxzfwuoc",
     CLOUDINARY_API_KEY: "697296588947346",
     CLOUDINARY_API_SECRET: "N26upNNLmFVgqXnMZcsUdv4Qa9U",
+    STRIPE_PUBLIC_KEY:
+      "pk_test_51NjtpGEg12ZgjhENFjNdBsbSEZLMwpZjGgDZ3sDgUOEh8nV8HFKSc9TOU9xFLfOdgrxzolrlxWBezYgJizyQNJAw00b39qgW7M",
+    STRIPE_SECRET_KEY:
+      "sk_test_51NjtpGEg12ZgjhENxFZlWdI7QuUfSxhX74D1GY3TENjS5G6FuRcYyHxyP9jZfljt0qoICCDc7ZHAQNW2mcqrFvM300yU1OOlxE",
+    STRIPE_WEBHOOK_SECRET:
+      "whsec_3d27ea7d1c17af1ab8909ca4fd47dd27fed6ea46af4b773f2fc53579ce45d653",
   },
   images: { domains: ["res.cloudinary.com"] },
 };
 
 module.exports = nextConfig;
+//>stripe listen --events checkout.session.completed --forward-to localhost:3000/api/order/webhook

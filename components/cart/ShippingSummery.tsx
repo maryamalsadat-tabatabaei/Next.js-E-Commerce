@@ -30,8 +30,8 @@ const ShippingSummery = () => {
 
         <h2 className="text-lg font-semibold mb-3">Items in cart</h2>
 
-        {cart?.cartItems?.map((item) => (
-          <figure className="flex items-center mb-4 leading-5">
+        {cart?.cartItems?.map((item, index) => (
+          <figure className="flex items-center mb-4 leading-5" key={index}>
             <div>
               <div className="block relative w-20 h-20 rounded p-1 border border-gray-200">
                 <img className="50" height="50" src={item.image} alt="Title" />

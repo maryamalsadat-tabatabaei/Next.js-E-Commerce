@@ -8,18 +8,19 @@ import {
 } from "react";
 import { CheckoutInformation, CartItem } from "@/interfaces/cart";
 import { useRouter } from "next/navigation";
+import { Document, Types } from "mongoose";
 
 export interface CartContextProps {
   cart: { cartItems?: CartItem[]; checkoutInfo?: CheckoutInformation };
   addItemToCart: (product: CartItem) => void;
-  deleteItemFromCart: (productId: string) => void;
+  deleteItemFromCart: (productId: Types.ObjectId) => void;
   clearCart: () => void;
   saveOnCheckout: (checkoutInfo: CheckoutInformation) => void;
 }
 const initialCartContext = {
   cart: { cartItems: [] },
   addItemToCart: (product: CartItem) => {},
-  deleteItemFromCart: (productId: string) => {},
+  deleteItemFromCart: (productId: Types.ObjectId) => {},
   clearCart: () => {},
   saveOnCheckout: (checkoutInfo: CheckoutInformation) => {},
 };
@@ -59,7 +60,7 @@ const CartProvider = ({ children }: { children: ReactNode }) => {
     );
     setCartFromStorageToState();
   };
-  const deleteItemFromCart = (productId: string) => {
+  const deleteItemFromCart = (productId: Types.ObjectId) => {
     const updateCartItems = cart?.cartItems?.filter(
       (item: CartItem) => item.productId !== productId
     );

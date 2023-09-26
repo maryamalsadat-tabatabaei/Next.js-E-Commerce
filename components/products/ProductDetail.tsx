@@ -27,6 +27,10 @@ const ProductDetail = ({ product }: { product: Product }) => {
       stock: product.stock,
       seller: product.seller,
       quantity: 1,
+      publisher: product.publisher,
+      category: product.category,
+      author: product.author,
+      description: product.description,
     });
   };
   const breadCrumbList = [

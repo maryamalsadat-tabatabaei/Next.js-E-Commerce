@@ -3,21 +3,37 @@
 import Link from "next/link";
 import BreadCrumbs from "../layouts/BreadCrumbs";
 import Address from "@/interfaces/address";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import ShippingSummery from "./ShippingSummery";
+import axios from "axios";
+import { CartContext } from "@/context/CartContext";
 
 const Shipping = ({ userAddressList }: { userAddressList: Address[] }) => {
+  const { cart } = useContext(CartContext);
   const [shippingInfo, setShippingInfo] = useState<string | undefined>("");
 
   const setShippingAddress = (address: Address) => {
     setShippingInfo(address._id?.toString());
   };
-  const CheckoutHandler = () => {
+  const CheckoutHandler = async () => {
     if (!shippingInfo) {
       return toast.error("Please select your shipping address");
     }
     // move to stripe checkoutpage
+    try {
+      const { data } = await axios.post(
+        `${process.env.API_URL}/api/order/checkout-session`,
+        {
+          cartItems: cart?.cartItems,
+          shippingInfo,
+        }
+      );
+
+      window.location.href = data.url;
+    } catch (error: any) {
+      console.log(error.response);
+    }
   };
   const breadCrumbList = [
     { name: "Home", url: "/" },
@@ -40,28 +56,31 @@ const Shipping = ({ userAddressList }: { userAddressList: Address[] }) => {
                   {userAddressList &&
                     userAddressList?.map((address) => {
                       return (
-                        <label
-                          onClick={() => setShippingAddress(address)}
-                          className="flex p-3 border border-gray-200 rounded-md bg-gray-50 hover:border-blue-400 hover:bg-blue-50 cursor-pointer"
-                        >
-                          <span>
-                            <input
-                              name="shipping"
-                              type="radio"
-                              className="h-4 w-4 mt-1"
-                            />
-                          </span>
-                          <p className="ml-2">
-                            <span>{address.street} street</span>
-                            <small className="block text-sm text-gray-400">
-                              {address.city}, {address.state}, {address.zipCode}
-                              <br />
-                              {address.country}
-                              <br />
-                              {address.phoneNo}
-                            </small>
-                          </p>
-                        </label>
+                        <div key={address._id?.toString()}>
+                          <label
+                            onClick={() => setShippingAddress(address)}
+                            className="flex p-3 border border-gray-200 rounded-md bg-gray-50 hover:border-blue-400 hover:bg-blue-50 cursor-pointer"
+                          >
+                            <span>
+                              <input
+                                name="shipping"
+                                type="radio"
+                                className="h-4 w-4 mt-1"
+                              />
+                            </span>
+                            <p className="ml-2">
+                              <span>{address.street} street</span>
+                              <small className="block text-sm text-gray-400">
+                                {address.city}, {address.state},{" "}
+                                {address.zipCode}
+                                <br />
+                                {address.country}
+                                <br />
+                                {address.phoneNo}
+                              </small>
+                            </p>
+                          </label>
+                        </div>
                       );
                     })}
                 </div>

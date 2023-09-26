@@ -1,5 +1,6 @@
+import { Document, Types } from "mongoose";
 interface Product {
-  _id: string;
+  _id: Types.ObjectId;
   name: string;
   description: string;
   author: string;
