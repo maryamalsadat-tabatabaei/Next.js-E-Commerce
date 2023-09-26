@@ -7,6 +7,7 @@ import { CartItem } from "@/interfaces/cart";
 import { getCartItems } from "@/helpers/getCartItems";
 import { OrderModel } from "../models";
 import mongoose from "mongoose";
+import APIFilters from "../utils/APIFilters";
 const { Schema } = mongoose;
 const ObjectId = mongoose.Types.ObjectId;
 
@@ -106,5 +107,31 @@ export const webhook = async (req: any, res: NextApiResponse) => {
     }
   } catch (error) {
     console.log(error);
+  }
+};
+
+interface CustomQuery {
+  [key: string]: string;
+}
+export const getOrders = async (req: any, res: NextApiResponse) => {
+  try {
+    const numberPerPage = 2;
+    let currentPage = Math.max(1, parseInt(req.query.page as string, 10)) || 1;
+    const ordersCount = (await OrderModel.countDocuments()) || 0;
+
+    const apiFilters = new APIFilters(
+      OrderModel.find().populate("shippingInfo user"),
+      req.query as CustomQuery
+    ).pagination(numberPerPage, currentPage);
+    const orders = await apiFilters.execute();
+
+    res.status(200).json({
+      ordersCount,
+      numberPerPage,
+      orders,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };

@@ -57,7 +57,7 @@ const CustomPagination = ({
       <Pagination
         activePage={page}
         itemsCountPerPage={numberPerPage}
-        totalItemsCount={productsCount}
+        totalItemsCount={productsCount || 0}
         onChange={handlePageChange}
         pageRangeDisplayed={3}
         nextPageText={"Next >"}

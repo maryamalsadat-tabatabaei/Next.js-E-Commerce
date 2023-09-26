@@ -21,8 +21,8 @@ export default function ProductList({ data }: { data: Products }) {
           <Filters />
           <main className="md:w-2/3 lg:w-3/4 px-3">
             {data?.products?.length !== 0 ? (
-              data?.products?.map((product) => (
-                <ProductItem key={product?._id} product={product} />
+              data?.products?.map((product, index) => (
+                <ProductItem key={index} product={product} />
               ))
             ) : (
               <main className="flex min-h-screen text-lg font-semibold flex-col items-center justify-between p-24">

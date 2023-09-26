@@ -4,7 +4,7 @@ import User from "./user";
 import Address from "./address";
 
 interface OrderItem {
-  product: Types.ObjectId;
+  product: Types.ObjectId | Product;
   name: string;
   image: string;
   quantity: number;
