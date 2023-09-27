@@ -7,13 +7,16 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import { ReactNode } from "react";
+import ProductProvider from "@/context/ProductContext";
 export function GlobalProvider({ children }: { children: ReactNode }) {
   return (
     <>
       <ToastContainer position="bottom-right" />
       <AuthProvider>
         <CartProvider>
-          <SessionProvider>{children}</SessionProvider>
+          <ProductProvider>
+            <SessionProvider>{children}</SessionProvider>
+          </ProductProvider>
         </CartProvider>
       </AuthProvider>
     </>

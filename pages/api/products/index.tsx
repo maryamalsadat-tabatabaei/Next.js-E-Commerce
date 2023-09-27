@@ -1,15 +1,10 @@
 import { createRouter } from "next-connect";
 import onError from "@/lib/middlewares/error";
 import dbConnect from "@/lib/config/dbConnect";
-import { createProduct, getProducts } from "@/lib/contollers/productController";
+import { getProducts } from "@/lib/contollers/productController";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 const router = createRouter<NextApiRequest, NextApiResponse>();
-
-router.post(async (req, res) => {
-  await dbConnect();
-  createProduct(req, res);
-});
 
 router.get(async (req, res) => {
   await dbConnect();

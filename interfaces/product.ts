@@ -34,3 +34,27 @@ interface Product {
 }
 
 export default Product;
+
+export interface ProductForm {
+  name: string;
+  description: string;
+  author: string;
+  price: number;
+  // images: Array<{
+  //   public_id: string;
+  //   url: string;
+  // }>;
+  category:
+    | "Fiction"
+    | "Biography/Autobiography"
+    | "Science"
+    | "Fantasy"
+    | "Psychology"
+    | "Self-Help"
+    | "Mystery/Thriller"
+    | "Romance"
+    | "History";
+  seller: string;
+  publisher: string;
+  stock: number;
+}

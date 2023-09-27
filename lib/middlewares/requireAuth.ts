@@ -22,4 +22,18 @@ const isAuthenticatedUser = async (
   next();
 };
 
-export { isAuthenticatedUser };
+const authorizeRoles = (...roles: string[]) => {
+  return (req: CustomNextApiRequest, res: NextApiResponse, next: Function) => {
+    if (!roles.includes(req.user?.role as string)) {
+      return next(
+        new ErrorHandler(
+          `Role (${req.user?.role}) is not allowed to access this resource.`,
+          401
+        )
+      );
+    }
+    next();
+  };
+};
+
+export { isAuthenticatedUser, authorizeRoles };
