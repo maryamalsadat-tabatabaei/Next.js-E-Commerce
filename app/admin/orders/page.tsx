@@ -2,7 +2,7 @@ import axios from "axios";
 import { cookies } from "next/headers";
 import { getCookieName } from "@/helpers/getCookieName";
 import queryString from "query-string";
-import OrderList from "@/components/order/OrderList";
+import Orders from "@/components/admin/Orders";
 
 const getOrders = async ({
   searchParams,
@@ -35,12 +35,12 @@ const getOrders = async ({
   return data;
 };
 
-export default async function OrderListPage({
+export default async function OrdersPage({
   searchParams,
 }: {
   searchParams: { page: string };
 }) {
   const orders = await getOrders({ searchParams });
 
-  return <OrderList orders={orders} />;
+  return <Orders orders={orders} />;
 }

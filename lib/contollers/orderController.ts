@@ -135,3 +135,60 @@ export const getOrders = async (req: any, res: NextApiResponse) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+export const getOrder = async (req: any, res: NextApiResponse) => {
+  try {
+    const orderId = req.query.id as string;
+    const order = await OrderModel.findById(orderId).populate(
+      "shippingInfo user"
+    );
+    if (!order) res.status(404).json({ error: "No Order found with this ID" });
+
+    res.status(200).json({ order });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+export const updateOrder = async (
+  req: any,
+  res: NextApiResponse,
+  next: Function
+) => {
+  try {
+    let order = await OrderModel.findById(req.query.id);
+    if (!order)
+      return next(new ErrorHandler("No Order found with this ID.", 404));
+
+    order = await OrderModel.findByIdAndUpdate(req.query.id, {
+      orderStatus: req.body.orderStatus,
+    });
+    res.status(200).json({
+      success: true,
+      order,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+export const deleteOrder = async (
+  req: any,
+  res: NextApiResponse,
+  next: Function
+) => {
+  try {
+    let order = await OrderModel.findById(req.query.id);
+    if (!order)
+      return next(new ErrorHandler("No Order found with this ID.", 404));
+
+    await order.deleteOne();
+
+    res.status(200).json({
+      success: true,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};

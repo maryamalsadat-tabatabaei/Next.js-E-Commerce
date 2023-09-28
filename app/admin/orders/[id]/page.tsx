@@ -1,26 +1,17 @@
 import axios from "axios";
 import { cookies } from "next/headers";
 import { getCookieName } from "@/helpers/getCookieName";
-import queryString from "query-string";
-import OrderList from "@/components/order/OrderList";
+import mongoose from "mongoose";
+import { redirect } from "next/navigation";
+import UpdateOrder from "@/components/admin/UpdateOrder";
 
-const getOrders = async ({
-  searchParams,
-}: {
-  searchParams: { page: string };
-}) => {
+const getOrder = async ({ orderId }: { orderId: string }) => {
   const nextCookies = cookies();
   const cookieName = getCookieName();
   const nextAuthSessionToken = nextCookies.get(cookieName);
 
-  const urlParams = {
-    page: searchParams.page || 1,
-  };
-
-  const searchQuery = queryString.stringify(urlParams);
-
   const { data } = await axios.get(
-    `${process.env.API_URL}/api/order?${searchQuery}`,
+    `${process.env.API_URL}/api/admin/orders/${orderId}`,
     {
       headers: {
         Cookie: `${nextAuthSessionToken?.name}=${nextAuthSessionToken?.value}`,
@@ -31,16 +22,20 @@ const getOrders = async ({
     console.log("Failed to fetch data");
     // throw new Error("Failed to fetch data");
   }
-
   return data;
 };
 
-export default async function OrderListPage({
-  searchParams,
+export default async function UpdateOrderPage({
+  params,
 }: {
-  searchParams: { page: string };
+  params: { id: string };
 }) {
-  const orders = await getOrders({ searchParams });
+  const isValidId = mongoose.isValidObjectId(params?.id);
 
-  return <OrderList orders={orders} />;
+  if (!isValidId) {
+    return redirect("/");
+  }
+  const data = await getOrder({ orderId: params?.id });
+
+  return <UpdateOrder order={data?.order} />;
 }
