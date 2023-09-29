@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import { createContext, useState, ReactNode, useContext } from "react";
 import User, { UpdatePasswordForm } from "@/interfaces/user";
 import { FormAddress } from "@/interfaces/address";
+import { Types } from "mongoose";
 
 export interface AuthContextProps {
   user: User | null;
@@ -20,6 +21,15 @@ export interface AuthContextProps {
   updateAddress: (addressId: string, address: FormAddress) => void;
   deleteAddress: (addressId: string) => void;
   updateProfile: (formData: FormData) => void;
+  updateUser: (
+    userData: {
+      name: string;
+      email: string;
+      role: string;
+    },
+    userId: Types.ObjectId
+  ) => void;
+  deleteUser: (userId: Types.ObjectId) => void;
 }
 const initialAuthContext = {
   user: {
@@ -41,6 +51,15 @@ const initialAuthContext = {
   updateAddress: (addressId: string, address: FormAddress) => {},
   deleteAddress: (addressId: string) => {},
   updateProfile: (formData: FormData) => {},
+  updateUser: (
+    userData: {
+      name: string;
+      email: string;
+      role: string;
+    },
+    userId: Types.ObjectId
+  ) => {},
+  deleteUser: (userId: Types.ObjectId) => {},
 };
 
 export const AuthContext = createContext<AuthContextProps>(initialAuthContext);
@@ -195,6 +214,40 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
     }
   };
+  const updateUser = async (
+    userData: {
+      name: string;
+      email: string;
+      role: string;
+    },
+    userId: Types.ObjectId
+  ) => {
+    try {
+      const { data } = await axios.put(
+        `${process.env.API_URL}/api/admin/users/${userId}`,
+        userData
+      );
+      if (data) {
+        setUpdated(true);
+        router.replace("/admin/users");
+      }
+    } catch (error) {
+      setError(error?.response?.data?.message);
+    }
+  };
+  const deleteUser = async (userId: Types.ObjectId) => {
+    try {
+      const { data } = await axios.delete(
+        `${process.env.API_URL}/api/admin/users/${userId}`
+      );
+      if (data?.success) {
+        setDeleted(true);
+        router.replace("/admin/users");
+      }
+    } catch (error) {
+      setError(error?.response?.data?.message);
+    }
+  };
   return (
     <AuthContext.Provider
       value={{
@@ -208,8 +261,8 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         registerUser,
         updateProfile,
         updatePassword,
-        // updateUser,
-        // deleteUser,
+        updateUser,
+        deleteUser,
         updateAddress,
         deleteAddress,
         deleted,

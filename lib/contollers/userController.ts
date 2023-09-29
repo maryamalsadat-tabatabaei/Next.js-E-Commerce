@@ -6,6 +6,7 @@ import { CustomNextApiRequest } from "@/interfaces/user";
 import fs from "fs";
 import ErrorHandler from "../utils/errorHandler";
 import bcrypt from "bcryptjs";
+import APIFilters from "../utils/APIFilters";
 
 export const registerUser = async (
   req: CustomNextApiRequest,
@@ -89,4 +90,83 @@ export const updatePassword = async (
   res.status(200).json({
     success: true,
   });
+};
+
+interface CustomQuery {
+  [key: string]: string;
+}
+export const getUsers = async (req: any, res: NextApiResponse) => {
+  try {
+    const numberPerPage = 2;
+    let currentPage = Math.max(1, parseInt(req.query.page as string, 10)) || 1;
+    const usersCount = (await UserModel.countDocuments()) || 0;
+
+    const apiFilters = new APIFilters(
+      UserModel.find(),
+      req.query as CustomQuery
+    ).pagination(numberPerPage, currentPage);
+    const users = await apiFilters.execute();
+
+    res.status(200).json({
+      usersCount,
+      numberPerPage,
+      users,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+export const getUser = async (req: any, res: NextApiResponse) => {
+  try {
+    const userId = req.query.id as string;
+    const user = await UserModel.findById(userId);
+    if (!user) res.status(404).json({ error: "No User found with this ID" });
+
+    res.status(200).json({ user });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+export const updateUser = async (
+  req: any,
+  res: NextApiResponse,
+  next: Function
+) => {
+  try {
+    let user = await UserModel.findById(req.query.id);
+    if (!user)
+      return next(new ErrorHandler("No User found with this ID.", 404));
+
+    user = await UserModel.findByIdAndUpdate(req.query.id, req.body);
+    res.status(200).json({
+      success: true,
+      user,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+export const deleteUser = async (
+  req: any,
+  res: NextApiResponse,
+  next: Function
+) => {
+  try {
+    let user = await UserModel.findById(req.query.id);
+    if (!user)
+      return next(new ErrorHandler("No User found with this ID.", 404));
+
+    await user.deleteOne();
+
+    res.status(200).json({
+      success: true,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 };
