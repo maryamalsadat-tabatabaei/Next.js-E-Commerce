@@ -1,4 +1,5 @@
 import { Document, Types } from "mongoose";
+import User from "./user";
 interface Product {
   _id: Types.ObjectId;
   name: string;
@@ -24,7 +25,7 @@ interface Product {
   stock: number;
   ratings: number;
   reviews: Array<{
-    user: string;
+    user: Types.ObjectId | User;
     rating: number;
     comment: string;
     createdAt: Date;

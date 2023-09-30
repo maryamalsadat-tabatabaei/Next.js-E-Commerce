@@ -192,3 +192,20 @@ export const deleteOrder = async (
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+export const canReview = async (
+  req: CustomNextApiRequest,
+  res: NextApiResponse
+) => {
+  const productId = req.query.productId;
+  const orders = await OrderModel.find({
+    user: req?.user?._id,
+    "orderItems.product": productId,
+  });
+
+  let canReview = orders?.length >= 1 ? true : false;
+
+  res.status(200).json({
+    canReview,
+  });
+};

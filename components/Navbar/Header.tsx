@@ -7,6 +7,7 @@ import { AuthContext } from "@/context/AuthContext";
 import { useContext, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import User from "@/interfaces/user";
+import { FaShoppingCart } from "react-icons/fa";
 
 const Header = () => {
   const { cart } = useContext(CartContext);
@@ -38,9 +39,9 @@ const Header = () => {
           <div className="flex items-center space-x-2 ml-auto">
             <Link
               href="/cart"
-              className="px-3 py-2 inline-block text-center text-gray-700 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 hover:border-gray-300"
+              className="transform transition-transform flex items-center px-3 py-2 text-center text-gray-700 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 hover:border-gray-300"
             >
-              <i className="text-gray-400 w-5 fa fa-shopping-cart"></i>
+              <FaShoppingCart className="text-blue-600 w-5" />
               <span className="hidden lg:inline ml-1">
                 Cart (<b>{cart?.cartItems?.length || 0}</b>)
               </span>

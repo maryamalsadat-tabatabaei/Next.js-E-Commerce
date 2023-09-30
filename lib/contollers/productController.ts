@@ -67,11 +67,39 @@ export const getProducts = async (
 };
 
 export const getProduct = async (req: NextApiRequest, res: NextApiResponse) => {
-  const productId = req.query.id as string;
-  const product = await ProductModel.findById(productId);
-  if (!product) res.status(404).json({ error: "Product not found" });
+  try {
+    const productId = req.query.id as string;
+    let product = await ProductModel.findById(productId).populate(
+      "reviews.user"
+    );
 
-  res.status(200).json({ product });
+    if (product) {
+      const numberPerPage = 2;
+      let currentPage =
+        Math.max(1, parseInt(req.query.page as string, 10)) || 1;
+      const skip = (currentPage - 1) * numberPerPage;
+
+      const reviewsCount = product.reviews.length || 0;
+
+      (product = await ProductModel.findById(productId).populate({
+        path: "reviews.user",
+        options: {
+          skip,
+          limit: numberPerPage,
+        },
+      })),
+        res.status(200).json({
+          reviewsCount,
+          numberPerPage,
+          product,
+        });
+    } else {
+      res.status(404).json({ error: "Product not found" });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 };
 
 export const uploadProductImages = async (
@@ -136,6 +164,51 @@ export const deleteProduct = async (
       product.images[i].public_id as string
     );
   }
+  res.status(200).json({
+    success: true,
+  });
+};
+
+export const createProductReview = async (
+  req: CustomNextApiRequest,
+  res: NextApiResponse,
+  next: Function
+) => {
+  const { rating, comment, productId } = req.body;
+
+  const review = {
+    user: req?.user?._id,
+    rating: Number(rating),
+    comment,
+  };
+
+  let product = await ProductModel.findById(productId);
+
+  if (!product) {
+    return next(new ErrorHandler("Product not found.", 404));
+  }
+
+  const isReviewed = product?.reviews?.find(
+    (r) => r.user.toString() === req?.user?._id.toString()
+  );
+
+  if (isReviewed) {
+    product?.reviews.forEach((review) => {
+      if (review.user.toString() === req?.user?._id.toString()) {
+        review.comment = comment;
+        review.rating = rating;
+      }
+    });
+  } else {
+    product?.reviews.push(review);
+  }
+
+  product.ratings =
+    product?.reviews?.reduce((acc, item) => item.rating + acc, 0) /
+    product.reviews.length;
+
+  await product?.save();
+
   res.status(200).json({
     success: true,
   });

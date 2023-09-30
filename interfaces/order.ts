@@ -3,7 +3,7 @@ import Product from "./product";
 import User from "./user";
 import Address from "./address";
 
-interface OrderItem {
+export interface OrderItem {
   product: Types.ObjectId | Product;
   name: string;
   image: string;

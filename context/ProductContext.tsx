@@ -16,6 +16,11 @@ export interface ProductContextProps {
   uploadProductImages: (formData: FormData, productId: Types.ObjectId) => void;
   updateProduct: (formData: ProductForm, productId: Types.ObjectId) => void;
   deleteProduct: (productId: Types.ObjectId) => void;
+  createReview: (reviewData: {
+    rating: number;
+    comment: string;
+    productId: Types.ObjectId;
+  }) => void;
 }
 const initialProductContext = {
   updated: false,
@@ -29,6 +34,11 @@ const initialProductContext = {
   uploadProductImages: (formData: FormData, productId: Types.ObjectId) => {},
   updateProduct: (formData: ProductForm, productId: Types.ObjectId) => {},
   deleteProduct: (productId: Types.ObjectId) => {},
+  createReview: (reviewData: {
+    rating: number;
+    comment: string;
+    productId: Types.ObjectId;
+  }) => {},
 };
 
 export const ProductContext = createContext<ProductContextProps>(
@@ -110,6 +120,23 @@ const ProductProvider = ({ children }: { children: ReactNode }) => {
       setError(error?.response?.data?.message);
     }
   };
+  const createReview = async (reviewData: {
+    rating: number;
+    comment: string;
+    productId: Types.ObjectId;
+  }) => {
+    try {
+      const { data } = await axios.put(
+        `${process.env.API_URL}/api/products/review`,
+        reviewData
+      );
+      if (data?.success) {
+        router.replace(`/product/${reviewData?.productId}`);
+      }
+    } catch (error) {
+      setError(error?.response?.data?.message);
+    }
+  };
   return (
     <ProductContext.Provider
       value={{
@@ -124,6 +151,7 @@ const ProductProvider = ({ children }: { children: ReactNode }) => {
         uploadProductImages,
         deleteProduct,
         updateProduct,
+        createReview,
       }}
     >
       {children}

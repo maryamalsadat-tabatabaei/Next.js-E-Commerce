@@ -9,17 +9,20 @@ export interface OrderContextProps {
   error: string | null;
   updated: boolean;
   deleted: boolean;
+  canReview: boolean;
   clearErrors: () => void;
   updateOrder: (
     orderData: { orderStatus: string },
     orderId: Types.ObjectId
   ) => void;
   deleteOrder: (orderId: Types.ObjectId) => void;
+  canUserRivew: (productId: Types.ObjectId) => void;
 }
 const initialOrderContext = {
   updated: false,
   deleted: false,
   error: "",
+  canReview: false,
   clearErrors: () => {},
   setUpdated: () => false,
   setDeleted: () => false,
@@ -28,6 +31,7 @@ const initialOrderContext = {
     orderId: Types.ObjectId
   ) => {},
   deleteOrder: (orderId: Types.ObjectId) => {},
+  canUserRivew: (productId: Types.ObjectId) => {},
 };
 
 export const OrderContext =
@@ -38,6 +42,7 @@ const OrderProvider = ({ children }: { children: ReactNode }) => {
   const [error, setError] = useState(null);
   const [updated, setUpdated] = useState<boolean>(false);
   const [deleted, setDeleted] = useState<boolean>(false);
+  const [canReview, setCanReview] = useState(false);
 
   const updateOrder = async (
     orderData: { orderStatus: string },
@@ -69,6 +74,18 @@ const OrderProvider = ({ children }: { children: ReactNode }) => {
       setError(error?.response?.data?.message);
     }
   };
+  const canUserRivew = async (productId: Types.ObjectId) => {
+    try {
+      const { data } = await axios.get(
+        `${process.env.API_URL}/api/order/can-review?productId=${productId}`
+      );
+      if (data?.canReview) {
+        setCanReview(data?.canReview);
+      }
+    } catch (error) {
+      setError(error?.response?.data?.message);
+    }
+  };
   const clearErrors = () => {
     setError(null);
   };
@@ -83,6 +100,8 @@ const OrderProvider = ({ children }: { children: ReactNode }) => {
         clearErrors,
         deleteOrder,
         updateOrder,
+        canUserRivew,
+        canReview,
       }}
     >
       {children}

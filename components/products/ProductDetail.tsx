@@ -4,20 +4,40 @@ import StarRatings from "react-star-ratings";
 import Product from "@/interfaces/product";
 import BreadCrumbs from "../layouts/BreadCrumbs";
 import Image from "next/image";
-import { useRef, useContext } from "react";
+import { useRef, useContext, useEffect } from "react";
 import { CartContext } from "@/context/CartContext";
+import ReviewForm from "../reviews/ReviewForm";
+import { FaShoppingBag, FaShoppingCart } from "react-icons/fa";
+import { useRouter } from "next/navigation";
+import { OrderContext } from "@/context/OrderContext";
+import Reviews from "../reviews/Reviews";
 
-const ProductDetail = ({ product }: { product: Product }) => {
+const ProductDetail = ({
+  product,
+  reviewsCount,
+  numberPerPage,
+}: {
+  product: Product;
+  reviewsCount: number;
+  numberPerPage: number;
+}) => {
+  const router = useRouter();
   const { addItemToCart } = useContext(CartContext);
+  const { canUserRivew, canReview } = useContext(OrderContext);
 
   const inStock = product?.stock >= 1;
   const imageRef = useRef<HTMLImageElement | null>(null);
+
+  useEffect(() => {
+    canUserRivew(product?._id);
+  }, []);
 
   const setImagePreview = (imageUrl: string) => {
     if (imageRef.current) {
       imageRef.current.src = imageUrl;
     }
   };
+
   const addToCartHandler = () => {
     addItemToCart({
       productId: product._id,
@@ -32,6 +52,10 @@ const ProductDetail = ({ product }: { product: Product }) => {
       author: product.author,
       description: product.description,
     });
+  };
+  const buyNowHandler = () => {
+    addToCartHandler();
+    router.push("/cart");
   };
   const breadCrumbList = [
     {
@@ -114,14 +138,22 @@ const ProductDetail = ({ product }: { product: Product }) => {
 
               <p className="mb-4 text-gray-500">{product?.description}</p>
 
-              <div className="flex flex-wrap gap-2 mb-5">
+              <div className="flex flex-wrap gap-5 mb-5">
                 <button
                   onClick={addToCartHandler}
                   disabled={!inStock}
-                  className="px-4 py-2 inline-block text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700"
+                  className="hover:scale-110 w-36 px-4 py-2 flex justify-center items-center gap-2 text-white text-base font-medium bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 transform transition-transform shadow-md"
                 >
-                  <i className="fa fa-shopping-cart mr-2"></i>
+                  <FaShoppingBag />
                   Add to cart
+                </button>
+                <button
+                  onClick={buyNowHandler}
+                  disabled={!inStock}
+                  className="hover:scale-110 w-36 px-4 py-2 flex justify-center items-center gap-2 text-white text-base font-medium bg-red-600 border border-transparent rounded-md hover:bg-red-700 transform transition-transform shadow-md"
+                >
+                  <FaShoppingCart />
+                  Buy now
                 </button>
               </div>
 
@@ -148,14 +180,18 @@ const ProductDetail = ({ product }: { product: Product }) => {
             </main>
           </div>
 
-          {/* <NewReview /> */}
+          {canReview && <ReviewForm product={product} />}
           <hr />
 
           <div className="font-semibold">
-            <h1 className="text-gray-500 review-title mb-6 mt-10 text-2xl">
-              Other Customers Reviews
+            <h1 className="text-gray-500 review-title mb-6 mt-10 text-2xl ">
+              Customers Reviews
             </h1>
-            {/* <Reviews /> */}
+            <Reviews
+              reviews={product?.reviews}
+              numberPerPage={numberPerPage}
+              reviewsCount={reviewsCount}
+            />
           </div>
         </div>
       </section>
