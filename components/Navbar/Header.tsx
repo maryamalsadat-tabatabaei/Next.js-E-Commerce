@@ -66,6 +66,8 @@ const Header = () => {
               <Link href="/profile">
                 <div className="flex items-center mb-4 space-x-3 mt-4 cursor-pointer">
                   <Image
+                    width={40}
+                    height={40}
                     className="w-10 h-10 rounded-full"
                     src={
                       user?.avatar

@@ -12,6 +12,8 @@ const UserProfileInfo = () => {
     <figure className="flex items-start sm:items-center">
       <div className="relative">
         <Image
+          width={64}
+          height={64}
           className="w-16 h-16 rounded-full mr-4"
           src={
             user?.avatar ? (user?.avatar?.url as string) : "/images/default.png"

@@ -2,14 +2,15 @@ import { formatDate } from "@/helpers/formatDate";
 import User from "@/interfaces/user";
 import StarRatings from "react-star-ratings";
 import CustomPagination from "../layouts/Pagination";
-import { Types } from "mongoose";
 import Image from "next/image";
+
 interface Review {
   user: User;
   rating: number;
   comment?: string;
   createdAt: Date;
 }
+
 const Reviews = ({
   reviews,
   numberPerPage,
@@ -29,6 +30,8 @@ const Reviews = ({
           >
             <div className="flex items-center mb-4 space-x-4">
               <Image
+                width={40}
+                height={40}
                 className="w-10 h-10 rounded-full"
                 src={
                   review?.user?.avatar

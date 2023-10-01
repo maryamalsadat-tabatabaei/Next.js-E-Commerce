@@ -34,6 +34,8 @@ const CartItem = () => {
                 <div>
                   <div className="block w-16 h-16 rounded border border-gray-200 overflow-hidden">
                     <Image
+                      width={64}
+                      height={64}
                       src={cartItem.image || "/images/default_product.png"}
                       alt={cartItem.name}
                     />

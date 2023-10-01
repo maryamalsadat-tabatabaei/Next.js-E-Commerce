@@ -144,6 +144,8 @@ const UpdateProfile = () => {
             <div className="mb-4 flex flex-col md:flex-row">
               <div className="flex items-center mb-4 space-x-3 mt-4 cursor-pointer md:w-1/5 lg:w-1/4">
                 <Image
+                  width={56}
+                  height={56}
                   alt="user profile"
                   className="w-14 h-14 rounded-full"
                   src={state.avatarPreview || "/images/default.png"}
