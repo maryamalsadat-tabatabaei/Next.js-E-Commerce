@@ -4,7 +4,6 @@ import User from "./interfaces/user";
 
 export default withAuth(
   async function middleware(req) {
-    // authorize roles
     const url = req.nextUrl.pathname;
     const user = req?.nextauth?.token?.user as User;
     const userRole = user?.role;
@@ -49,5 +48,5 @@ export default withAuth(
 );
 
 export const config = {
-  matcher: ["/admin/:path*", "/profile/:path*", "/shipping"],
+  matcher: ["/api/:path*", "/admin/:path*", "/profile/:path*", "/shipping"],
 };

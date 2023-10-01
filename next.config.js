@@ -4,8 +4,8 @@ const nextConfig = {
     MONGODB_URI:
       "mongodb+srv://mari:GidbPnAiw3taEyEG@node-project.6mr8s0d.mongodb.net/next-e-commerce",
     // API_URL: "http://localhost:3000/",
-    API_URL: "https://next-js-e-commerce-three-dusky.vercel.app/",
-    NEXTAUTH_URL: "https://next-js-e-commerce-three-dusky.vercel.app/",
+    API_URL: "https://next-js-e-commerce-three-dusky.vercel.app",
+    NEXTAUTH_URL: "https://next-js-e-commerce-three-dusky.vercel.app",
     NEXTAUTH_SECRET: "nextsecret@secretkeyforauth",
     GOOGLE_CLIENT_ID:
       "361634217496-id1skmjiti5kcuudo85dl3e2d47mkc13.apps.googleusercontent.com",
