@@ -8,6 +8,7 @@ import { getCartItems } from "@/helpers/getCartItems";
 import { OrderModel } from "../models";
 import mongoose from "mongoose";
 import APIFilters from "../utils/APIFilters";
+import { CheckoutSession } from "@/interfaces/CheckoutSession";
 const { Schema } = mongoose;
 const ObjectId = mongoose.Types.ObjectId;
 
@@ -77,11 +78,11 @@ export const webhook = async (req: any, res: NextApiResponse) => {
       process.env.STRIPE_WEBHOOK_SECRET as string
     );
     if (event.type === "checkout.session.completed") {
-      const session = event.data.object;
-
-      const line_items = await stripe.checkout.sessions.listLineItems(
-        event.data.object.id
-      );
+      const session: CheckoutSession = event.data.object;
+      let line_items;
+      if (session.id) {
+        line_items = await stripe.checkout.sessions.listLineItems(session.id);
+      }
 
       let orderItems = await getCartItems(line_items);
 
@@ -97,7 +98,7 @@ export const webhook = async (req: any, res: NextApiResponse) => {
 
       const orderData = {
         user: userId,
-        shippingInfo: session.metadata.shippingInfo,
+        shippingInfo: session.metadata?.shippingInfo,
         paymentInfo,
         orderItems,
       };

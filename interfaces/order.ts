@@ -24,8 +24,8 @@ interface PaymentInfo {
 }
 
 interface Order extends Document {
-  shippingInfo: Types.ObjectId | Address;
-  user: Types.ObjectId | User;
+  shippingInfo: Address;
+  user: User;
   orderItems: OrderItem[];
   paymentInfo: PaymentInfo;
   orderStatus: string;

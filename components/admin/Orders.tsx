@@ -25,7 +25,7 @@ const Orders = ({ orders }: { orders: OrdersType }) => {
       toast.error(error);
       clearErrors();
     }
-  }, [error, deleted]);
+  }, [error, deleted, clearErrors, setDeleted]);
   const deleteHandler = (orderId: Types.ObjectId) => {
     deleteOrder(orderId);
   };
@@ -53,7 +53,7 @@ const Orders = ({ orders }: { orders: OrdersType }) => {
         </thead>
         <tbody>
           {orders?.orders?.map((order) => (
-            <tr className="bg-white">
+            <tr className="bg-white" key={order?._id.toString()}>
               <td className="px-6 py-2">{order._id}</td>
               <td className="px-6 py-2">${order?.paymentInfo?.amountPaid}</td>
               <td className="px-6 py-2">{order?.orderStatus}</td>

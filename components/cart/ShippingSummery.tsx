@@ -2,6 +2,7 @@
 
 import { useContext } from "react";
 import { CartContext } from "@/context/CartContext";
+import Image from "next/image";
 
 const ShippingSummery = () => {
   const { cart } = useContext(CartContext);
@@ -34,7 +35,12 @@ const ShippingSummery = () => {
           <figure className="flex items-center mb-4 leading-5" key={index}>
             <div>
               <div className="block relative w-20 h-20 rounded p-1 border border-gray-200">
-                <img className="50" height="50" src={item.image} alt="Title" />
+                <Image
+                  className="50"
+                  height="50"
+                  src={item.image}
+                  alt="Title"
+                />
                 <span className="absolute -top-2 -right-2 w-6 h-6 text-sm text-center flex items-center justify-center text-white bg-gray-400 rounded-full">
                   {item.quantity}
                 </span>

@@ -22,11 +22,10 @@ const UpdateOrder = ({ order }: { order: Order }) => {
       toast.error(error);
       clearErrors();
     }
-  }, [error, updated]);
+  }, [error, updated, setUpdated, clearErrors]);
 
   const submitHandler = () => {
     const orderData = { orderStatus };
-    console.log("hereeeeeeee", orderData);
     updateOrder(orderData, order?._id);
   };
   return (

@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
-export default (err: any, req: NextApiRequest, res: NextApiResponse) => {
+export default function (err: any, req: NextApiRequest, res: NextApiResponse) {
   let error = { ...err };
 
   error.statusCode = err.statusCode || 500;
@@ -12,7 +12,7 @@ export default (err: any, req: NextApiRequest, res: NextApiResponse) => {
     message: error.message,
     stack: error.stack,
   });
-};
+}
 
 // import ErrorHandler from "../utils/errorHandler";
 

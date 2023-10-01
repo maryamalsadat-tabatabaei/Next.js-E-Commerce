@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { createContext, useState, ReactNode, useContext } from "react";
-import User, { UpdatePasswordForm } from "@/interfaces/user";
+import User, { UpdatePasswordForm, UserForm } from "@/interfaces/user";
 import { FormAddress } from "@/interfaces/address";
 import { Types } from "mongoose";
 
@@ -14,7 +14,7 @@ export interface AuthContextProps {
   loading: boolean | null;
   updated: boolean;
   deleted: boolean;
-  registerUser: (user: User) => void;
+  registerUser: (user: UserForm) => void;
   clearErrors: () => void;
   addNewUserAddress: (address: FormAddress) => void;
   updatePassword: (formPassword: UpdatePasswordForm) => void;
@@ -27,7 +27,7 @@ export interface AuthContextProps {
       email: string;
       role: string;
     },
-    userId: Types.ObjectId
+    userId: Types.ObjectId | undefined
   ) => void;
   deleteUser: (userId: Types.ObjectId) => void;
 }
@@ -36,12 +36,13 @@ const initialAuthContext = {
     name: "",
     email: "",
     password: "",
+    role: "user",
   },
   updated: false,
   deleted: false,
   loading: null,
   error: "",
-  registerUser: (user: User) => {},
+  registerUser: (user: UserForm) => {},
   clearErrors: () => {},
   setUser: () => {},
   setUpdated: () => false,
@@ -57,7 +58,7 @@ const initialAuthContext = {
       email: string;
       role: string;
     },
-    userId: Types.ObjectId
+    userId: Types.ObjectId | undefined
   ) => {},
   deleteUser: (userId: Types.ObjectId) => {},
 };
@@ -72,7 +73,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [updated, setUpdated] = useState<boolean>(false);
   const [deleted, setDeleted] = useState<boolean>(false);
 
-  const registerUser = async ({ ...user }: User) => {
+  const registerUser = async ({ ...user }: UserForm) => {
     try {
       const { data } = await axios.post(
         `${process.env.API_URL}/api/auth/register`,
@@ -220,7 +221,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
       email: string;
       role: string;
     },
-    userId: Types.ObjectId
+    userId: Types.ObjectId | undefined
   ) => {
     try {
       const { data } = await axios.put(
@@ -231,8 +232,13 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUpdated(true);
         router.replace("/admin/users");
       }
-    } catch (error) {
-      setError(error?.response?.data?.message);
+    } catch (err) {
+      if (axios.isAxiosError(err) && err.response?.data?.message) {
+        const error = err.response.data.message;
+        setError(error);
+      } else {
+        console.error(err);
+      }
     }
   };
   const deleteUser = async (userId: Types.ObjectId) => {
@@ -244,8 +250,13 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         setDeleted(true);
         router.replace("/admin/users");
       }
-    } catch (error) {
-      setError(error?.response?.data?.message);
+    } catch (err) {
+      if (axios.isAxiosError(err) && err.response?.data?.message) {
+        const error = err.response.data.message;
+        setError(error);
+      } else {
+        console.error(err);
+      }
     }
   };
   return (

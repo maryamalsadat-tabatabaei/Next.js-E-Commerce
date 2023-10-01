@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { createContext, useState, ReactNode, useContext } from "react";
 import { ProductForm } from "@/interfaces/product";
@@ -26,7 +26,7 @@ const initialProductContext = {
   updated: false,
   deleted: false,
   loading: null,
-  error: "",
+  error: null,
   clearErrors: () => {},
   setUpdated: () => false,
   setDeleted: () => false,
@@ -63,8 +63,13 @@ const ProductProvider = ({ children }: { children: ReactNode }) => {
       if (data) {
         router.replace("/admin/products");
       }
-    } catch (error) {
-      setError(error?.response?.data?.message);
+    } catch (err) {
+      if (axios.isAxiosError(err) && err.response?.data?.message) {
+        const error = err.response.data.message;
+        setError(error);
+      } else {
+        console.error(err);
+      }
     }
   };
   const uploadProductImages = async (
@@ -86,8 +91,13 @@ const ProductProvider = ({ children }: { children: ReactNode }) => {
         setLoading(false);
         router.replace("/admin/products");
       }
-    } catch (error) {
-      setError(error?.response?.data?.message);
+    } catch (err) {
+      if (axios.isAxiosError(err) && err.response?.data?.message) {
+        const error = err.response.data.message;
+        setError(error);
+      } else {
+        console.error(err);
+      }
     }
   };
   const updateProduct = async (
@@ -103,8 +113,13 @@ const ProductProvider = ({ children }: { children: ReactNode }) => {
         setUpdated(true);
         router.replace("/admin/products");
       }
-    } catch (error) {
-      setError(error?.response?.data?.message);
+    } catch (err) {
+      if (axios.isAxiosError(err) && err.response?.data?.message) {
+        const error = err.response.data.message;
+        setError(error);
+      } else {
+        console.error(err);
+      }
     }
   };
   const deleteProduct = async (productId: Types.ObjectId) => {
@@ -116,8 +131,13 @@ const ProductProvider = ({ children }: { children: ReactNode }) => {
         setDeleted(true);
         router.replace("/admin/products");
       }
-    } catch (error) {
-      setError(error?.response?.data?.message);
+    } catch (err) {
+      if (axios.isAxiosError(err) && err.response?.data?.message) {
+        const error = err.response.data.message;
+        setError(error);
+      } else {
+        console.error(err);
+      }
     }
   };
   const createReview = async (reviewData: {
@@ -133,8 +153,13 @@ const ProductProvider = ({ children }: { children: ReactNode }) => {
       if (data?.success) {
         router.replace(`/product/${reviewData?.productId}`);
       }
-    } catch (error) {
-      setError(error?.response?.data?.message);
+    } catch (err) {
+      if (axios.isAxiosError(err) && err.response?.data?.message) {
+        const error = err.response.data.message;
+        setError(error);
+      } else {
+        console.error(err);
+      }
     }
   };
   return (

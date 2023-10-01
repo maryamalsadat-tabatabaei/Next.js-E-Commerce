@@ -24,7 +24,7 @@ const Users = ({ users }: { users: UsersType }) => {
       toast.error(error);
       clearErrors();
     }
-  }, [error, deleted]);
+  }, [error, deleted, clearErrors, setDeleted]);
   const deleteHandler = (userId: Types.ObjectId) => {
     deleteUser(userId);
   };
@@ -52,7 +52,7 @@ const Users = ({ users }: { users: UsersType }) => {
         </thead>
         <tbody>
           {users?.users?.map((user) => (
-            <tr className="bg-white">
+            <tr className="bg-white" key={user?._id?.toString()}>
               <td className="px-6 py-2">{user?.name}</td>
               <td className="px-6 py-2">{user?.email}</td>
               <td className="px-6 py-2">{user?.role}</td>
@@ -65,7 +65,7 @@ const Users = ({ users }: { users: UsersType }) => {
                     <FaPencilAlt />
                   </Link>
                   <a
-                    onClick={() => deleteHandler(user?._id)}
+                    onClick={() => deleteHandler(user?._id as Types.ObjectId)}
                     className="px-2 py-2 inline-block text-red-600 bg-white shadow-sm buser buser-gray-200 rounded-md hover:bg-gray-100 cursor-pointer"
                   >
                     <FaTrash />

@@ -25,7 +25,7 @@ interface Product {
   stock: number;
   ratings: number;
   reviews: Array<{
-    user: Types.ObjectId | User;
+    user: User;
     rating: number;
     comment: string;
     createdAt: Date;
@@ -37,15 +37,11 @@ interface Product {
 export default Product;
 
 export interface ProductForm {
-  name: string;
-  description: string;
-  author: string;
-  price: number;
-  // images: Array<{
-  //   public_id: string;
-  //   url: string;
-  // }>;
-  category:
+  name?: string;
+  description?: string;
+  author?: string;
+  price?: number;
+  category?:
     | "Fiction"
     | "Biography/Autobiography"
     | "Science"
@@ -55,7 +51,7 @@ export interface ProductForm {
     | "Mystery/Thriller"
     | "Romance"
     | "History";
-  seller: string;
-  publisher: string;
-  stock: number;
+  seller?: string;
+  publisher?: string;
+  stock?: number;
 }

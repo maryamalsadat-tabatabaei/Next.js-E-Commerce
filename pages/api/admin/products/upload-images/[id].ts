@@ -32,9 +32,9 @@ const customUploadMiddleware = (req: any, res: any, next: any) => {
 
 router
   .use(isAuthenticatedUser, authorizeRoles("admin"), customUploadMiddleware)
-  .post(async (req, res) => {
+  .post(async (req, res, next) => {
     await dbConnect();
-    await uploadProductImages(req, res);
+    await uploadProductImages(req, res, next);
   });
 
 export default router.handler({ onError });

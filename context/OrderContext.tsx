@@ -57,8 +57,13 @@ const OrderProvider = ({ children }: { children: ReactNode }) => {
         setUpdated(true);
         router.replace("/admin/orders");
       }
-    } catch (error) {
-      setError(error?.response?.data?.message);
+    } catch (err) {
+      if (axios.isAxiosError(err) && err.response?.data?.message) {
+        const error = err.response.data.message;
+        setError(error);
+      } else {
+        console.error(err);
+      }
     }
   };
   const deleteOrder = async (orderId: Types.ObjectId) => {
@@ -70,8 +75,13 @@ const OrderProvider = ({ children }: { children: ReactNode }) => {
         setDeleted(true);
         router.replace("/admin/orders");
       }
-    } catch (error) {
-      setError(error?.response?.data?.message);
+    } catch (err) {
+      if (axios.isAxiosError(err) && err.response?.data?.message) {
+        const error = err.response.data.message;
+        setError(error);
+      } else {
+        console.error(err);
+      }
     }
   };
   const canUserRivew = async (productId: Types.ObjectId) => {
@@ -82,8 +92,13 @@ const OrderProvider = ({ children }: { children: ReactNode }) => {
       if (data?.canReview) {
         setCanReview(data?.canReview);
       }
-    } catch (error) {
-      setError(error?.response?.data?.message);
+    } catch (err) {
+      if (axios.isAxiosError(err) && err.response?.data?.message) {
+        const error = err.response.data.message;
+        setError(error);
+      } else {
+        console.error(err);
+      }
     }
   };
   const clearErrors = () => {

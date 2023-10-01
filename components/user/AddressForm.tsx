@@ -5,7 +5,7 @@ import Sidebar from "../layouts/Sidebar";
 import { countries } from "countries-list";
 import { Form, Formik, Field } from "formik";
 import validator from "validator";
-import Address, { FormAddress } from "@/interfaces/address";
+import { FormAddress } from "@/interfaces/address";
 import { AuthContext } from "@/context/AuthContext";
 import { toast } from "react-toastify";
 
@@ -88,7 +88,7 @@ const AddressForm = () => {
       toast.error(error);
       clearErrors();
     }
-  }, [error, updated]);
+  }, [error, updated, setUpdated, clearErrors]);
 
   const submitHandler = (values: FormAddress) => {
     // e.preventDefault();

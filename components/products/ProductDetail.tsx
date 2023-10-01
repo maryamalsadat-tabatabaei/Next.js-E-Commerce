@@ -30,7 +30,7 @@ const ProductDetail = ({
 
   useEffect(() => {
     canUserRivew(product?._id);
-  }, []);
+  }, [canUserRivew, product?._id]);
 
   const setImagePreview = (imageUrl: string) => {
     if (imageRef.current) {
@@ -75,7 +75,7 @@ const ProductDetail = ({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 mb-5">
             <aside>
               <div className="border border-gray-200 shadow-sm p-3 text-center rounded mb-5">
-                <img
+                <Image
                   className="object-cover inline-block"
                   ref={imageRef}
                   src={

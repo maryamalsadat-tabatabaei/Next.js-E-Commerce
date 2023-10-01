@@ -4,8 +4,9 @@ import { getCookieName } from "@/helpers/getCookieName";
 import mongoose from "mongoose";
 import { redirect } from "next/navigation";
 import UpdateProduct from "@/components/admin/UpdateProduct";
+import { Types } from "mongoose";
 
-const getProduct = async ({ productId }: { productId: string }) => {
+const getProduct = async ({ productId }: { productId: Types.ObjectId }) => {
   const nextCookies = cookies();
   const cookieName = getCookieName();
   const nextAuthSessionToken = nextCookies.get(cookieName);
@@ -28,7 +29,7 @@ const getProduct = async ({ productId }: { productId: string }) => {
 export default async function UpdateProductPage({
   params,
 }: {
-  params: { id: string };
+  params: { id: Types.ObjectId };
 }) {
   const isValidId = mongoose.isValidObjectId(params?.id);
 

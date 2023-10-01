@@ -33,7 +33,7 @@ const UpdateProduct = ({
       toast.error(error);
       clearErrors();
     }
-  }, [error, updated]);
+  }, [error, updated, clearErrors, setUpdated]);
 
   const changeHander = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>

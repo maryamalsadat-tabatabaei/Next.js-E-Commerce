@@ -1,5 +1,4 @@
 import Products from "@/components/admin/Products";
-import ProductList from "@/components/products/ProductList";
 import axios from "axios";
 import queryString from "query-string";
 

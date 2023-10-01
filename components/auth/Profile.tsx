@@ -12,7 +12,9 @@ const Profile = ({ userAddressList }: { userAddressList: Address[] }) => {
       <hr className="my-4" />
       {userAddressList &&
         userAddressList?.map((address) => {
-          return <AddressList address={address} key={address?._id} />;
+          return (
+            <AddressList address={address} key={address?._id?.toString()} />
+          );
         })}
       <Link
         href="/address/new"

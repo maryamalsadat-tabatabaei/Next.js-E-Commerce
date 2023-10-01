@@ -1,6 +1,5 @@
 import Header from "@/components/Navbar/Header";
 import { GlobalProvider } from "./GlobalProvider";
-import { inter } from "./layout";
 
 export default function RootLayout({
   children,
@@ -10,7 +9,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head />
-      <body className={inter.className}>
+      <body>
         <GlobalProvider>
           <Header />
           {children}

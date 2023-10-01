@@ -3,8 +3,9 @@ import User from "@/interfaces/user";
 import StarRatings from "react-star-ratings";
 import CustomPagination from "../layouts/Pagination";
 import { Types } from "mongoose";
+import Image from "next/image";
 interface Review {
-  user: User | Types.ObjectId;
+  user: User;
   rating: number;
   comment?: string;
   createdAt: Date;
@@ -22,16 +23,19 @@ const Reviews = ({
     <>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {reviews?.map((review) => (
-          <article className="block p-6 bg-white max-w-sm rounded-lg border border-gray-200 shadow-md mb-5">
+          <article
+            key={review?.createdAt.toString()}
+            className="block p-6 bg-white max-w-sm rounded-lg border border-gray-200 shadow-md mb-5"
+          >
             <div className="flex items-center mb-4 space-x-4">
-              <img
+              <Image
                 className="w-10 h-10 rounded-full"
                 src={
                   review?.user?.avatar
-                    ? review?.user?.avatar?.url
+                    ? (review?.user?.avatar?.url as string)
                     : "/images/default.png"
                 }
-                alt="user"
+                alt="user avatar"
               />
               <div className="space-y-1 font-medium">
                 <p>

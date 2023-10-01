@@ -5,6 +5,13 @@ import { useContext, useEffect, useState } from "react";
 import StarRatings from "react-star-ratings";
 import { toast } from "react-toastify";
 import { getUserReview } from "@/helpers/getUserReview";
+import { Types } from "mongoose";
+import User from "@/interfaces/user";
+
+interface UserReview {
+  rating: number;
+  comment: string;
+}
 
 const ReviewForm = ({ product }: { product: Product }) => {
   const { createReview, error, clearErrors } = useContext(ProductContext);
@@ -14,7 +21,10 @@ const ReviewForm = ({ product }: { product: Product }) => {
   const [comment, setComment] = useState("");
 
   useEffect(() => {
-    const userReview = getUserReview(product?.reviews, user?._id);
+    const userReview = getUserReview(
+      product?.reviews,
+      user?._id as Types.ObjectId
+    );
 
     if (userReview) {
       setRating(userReview?.rating);
@@ -25,7 +35,7 @@ const ReviewForm = ({ product }: { product: Product }) => {
       toast.error(error);
       clearErrors();
     }
-  }, [error, user]);
+  }, [error, user, clearErrors, product?.reviews]);
 
   const submitHandler = () => {
     const reviewData = { rating, comment, productId: product?._id };
@@ -45,7 +55,7 @@ const ReviewForm = ({ product }: { product: Product }) => {
             numberOfStars={5}
             name="rating"
             value={rating}
-            changeRating={(e) => setRating(e)}
+            changeRating={(e: any) => setRating(e)}
           />
         </div>
       </div>

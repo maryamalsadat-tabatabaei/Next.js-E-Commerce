@@ -1,11 +1,13 @@
 import { withAuth } from "next-auth/middleware";
 import { NextResponse } from "next/server";
+import User from "./interfaces/user";
 
 export default withAuth(
   async function middleware(req) {
     // authorize roles
     const url = req.nextUrl.pathname;
-    const userRole = req?.nextauth?.token?.user?.role;
+    const user = req?.nextauth?.token?.user as User;
+    const userRole = user?.role;
 
     if (url.startsWith("/api")) {
       NextResponse.next().headers.append("Access-Control-Allow-Origin", "*");

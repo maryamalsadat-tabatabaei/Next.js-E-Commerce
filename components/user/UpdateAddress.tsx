@@ -87,7 +87,7 @@ const UpdateAddress = ({
       toast.error(error);
       clearErrors();
     }
-  }, [error, updated, deleted]);
+  }, [error, updated, deleted, clearErrors, setUpdated, setDeleted]);
 
   const submitHandler = (values: FormAddress) => {
     // e.preventDefault();

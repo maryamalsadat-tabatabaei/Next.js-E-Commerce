@@ -3,6 +3,7 @@
 import { useContext } from "react";
 import { AuthContext } from "@/context/AuthContext";
 import { formatDate } from "@/helpers/formatDate";
+import Image from "next/image";
 
 const UserProfileInfo = () => {
   const { user } = useContext(AuthContext);
@@ -10,10 +11,12 @@ const UserProfileInfo = () => {
   return (
     <figure className="flex items-start sm:items-center">
       <div className="relative">
-        <img
+        <Image
           className="w-16 h-16 rounded-full mr-4"
-          src={user?.avatar ? user?.avatar?.url : "/images/default.png"}
-          alt={user?.name}
+          src={
+            user?.avatar ? (user?.avatar?.url as string) : "/images/default.png"
+          }
+          alt={user?.name as string}
         />
       </div>
       <figcaption>

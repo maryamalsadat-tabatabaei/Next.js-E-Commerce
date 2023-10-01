@@ -3,6 +3,7 @@ import Link from "next/link";
 import { CartContext } from "@/context/CartContext";
 import { useContext } from "react";
 import { CartItem } from "@/interfaces/cart";
+import Image from "next/image";
 
 const CartItem = () => {
   const { cart, deleteItemFromCart, addItemToCart } = useContext(CartContext);
@@ -32,7 +33,7 @@ const CartItem = () => {
               <figure className="flex leading-5">
                 <div>
                   <div className="block w-16 h-16 rounded border border-gray-200 overflow-hidden">
-                    <img
+                    <Image
                       src={cartItem.image || "/images/default_product.png"}
                       alt={cartItem.name}
                     />

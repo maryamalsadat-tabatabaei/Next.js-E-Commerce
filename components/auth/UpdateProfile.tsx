@@ -8,6 +8,7 @@ import {
 } from "react";
 import { AuthContext } from "@/context/AuthContext";
 import { toast } from "react-toastify";
+import Image from "next/image";
 
 interface State {
   name: string;
@@ -67,7 +68,7 @@ const UpdateProfile = () => {
       toast.error(error);
       clearErrors();
     }
-  }, [error, user]);
+  }, [error, user, clearErrors]);
   const submitHandler = (e: FormEvent) => {
     e.preventDefault();
 
@@ -142,7 +143,8 @@ const UpdateProfile = () => {
             <label className="block mb-1"> Avatar </label>
             <div className="mb-4 flex flex-col md:flex-row">
               <div className="flex items-center mb-4 space-x-3 mt-4 cursor-pointer md:w-1/5 lg:w-1/4">
-                <img
+                <Image
+                  alt="user profile"
                   className="w-14 h-14 rounded-full"
                   src={state.avatarPreview || "/images/default.png"}
                 />

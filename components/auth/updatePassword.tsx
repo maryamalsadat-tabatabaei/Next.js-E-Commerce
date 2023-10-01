@@ -23,7 +23,7 @@ const UpdatePassword = () => {
       toast.error(error);
       clearErrors();
     }
-  }, [error]);
+  }, [error, updated, clearErrors, setUpdated]);
 
   const validateForm = (values: UpdatePasswordForm) => {
     const errors: {

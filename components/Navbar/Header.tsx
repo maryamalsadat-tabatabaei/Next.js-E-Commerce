@@ -18,7 +18,7 @@ const Header = () => {
     if (data) {
       setUser(data?.user as User | null);
     }
-  }, [data]);
+  }, [data, setUser]);
 
   return (
     <header className="bg-white py-2 border-b">
@@ -65,11 +65,14 @@ const Header = () => {
               // </Link>
               <Link href="/profile">
                 <div className="flex items-center mb-4 space-x-3 mt-4 cursor-pointer">
-                  <img
+                  <Image
                     className="w-10 h-10 rounded-full"
                     src={
-                      user?.avatar ? user?.avatar?.url : "/images/default.png"
+                      user?.avatar
+                        ? (user?.avatar?.url as string)
+                        : "/images/default.png"
                     }
+                    alt="User avatar"
                   />
                   <div className="space-y-1 font-medium">
                     <div>

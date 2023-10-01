@@ -18,7 +18,7 @@ const Register = () => {
       toast.error(error);
       clearErrors();
     }
-  }, [error]);
+  }, [error, clearErrors]);
 
   const submitHandler = (e: FormEvent) => {
     e.preventDefault();

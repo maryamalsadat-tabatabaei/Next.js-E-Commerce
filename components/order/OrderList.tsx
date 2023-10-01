@@ -24,7 +24,7 @@ const OrderList = ({ orders }: { orders: Orders }) => {
       clearCart();
       router.replace("/profile/orders");
     }
-  }, []);
+  }, [clearCart, orderSuccess, router]);
 
   return (
     <>

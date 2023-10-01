@@ -10,11 +10,13 @@ const UploadImages = ({ productId }: { productId: Types.ObjectId }) => {
   const { error, clearErrors, loading, uploadProductImages } =
     useContext(ProductContext);
 
-  const [images, setImages] = useState([]);
-  const [privewImages, setPrivewImages] = useState([]);
+  const [images, setImages] = useState<File[]>([]);
+  const [privewImages, setPrivewImages] = useState<
+    (string | ArrayBuffer | null)[]
+  >([]);
 
   const ChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files);
+    const files = Array.from(e.target.files as FileList);
     setImages([]);
     setPrivewImages([]);
 
@@ -35,7 +37,7 @@ const UploadImages = ({ productId }: { productId: Types.ObjectId }) => {
       toast.error(error);
       clearErrors();
     }
-  }, [error]);
+  }, [error, clearErrors]);
   const submitHandler = (e: FormEvent) => {
     e.preventDefault();
 
@@ -83,8 +85,8 @@ const UploadImages = ({ productId }: { productId: Types.ObjectId }) => {
           <div className="grid grid-cols-6 gap-2 my-5">
             {privewImages?.map((img) => (
               <Image
-                src={img}
-                key={img}
+                src={img as string}
+                key={img as string}
                 alt="Preview"
                 className="col-span-1 object-contain shadow rounded border-2 border-gray p-2 h-full w-full"
                 width="50"

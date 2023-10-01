@@ -23,7 +23,7 @@ const UpdateUser = ({ user }: { user: User }) => {
       toast.error(error);
       clearErrors();
     }
-  }, [error, updated]);
+  }, [error, updated, clearErrors, setUpdated]);
 
   const submitHandler = (e: FormEvent) => {
     e.preventDefault();

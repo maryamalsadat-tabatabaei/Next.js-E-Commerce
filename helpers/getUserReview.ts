@@ -6,11 +6,15 @@ interface Review {
   comment: string;
 }
 export const getUserReview = (reviews: Review[], userId: Types.ObjectId) => {
-  let userReview = null;
+  let userReview = {
+    comment: "",
+    rating: 0,
+  };
 
   reviews.forEach((review) => {
     if (review?.user?._id === userId) {
-      userReview = review;
+      userReview.comment = review.comment;
+      userReview.rating = review.rating;
     }
   });
 

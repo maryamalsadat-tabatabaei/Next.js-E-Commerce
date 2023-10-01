@@ -9,7 +9,7 @@ interface User {
     public_id?: string;
     url?: string;
   };
-  role?: string;
+  role: string;
   createdAt?: Date;
 }
 export default User;
@@ -42,4 +42,10 @@ export interface UpdatePasswordForm {
   currentPassword: string;
   newPassword: string;
   confirmPassword: string;
+}
+
+export interface UserForm {
+  name: string;
+  email: string;
+  password: string;
 }

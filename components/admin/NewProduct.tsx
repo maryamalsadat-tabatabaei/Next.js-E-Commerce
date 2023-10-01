@@ -5,7 +5,7 @@ import { ChangeEvent, FormEvent, useContext, useState } from "react";
 
 const NewProduct = () => {
   const { createProduct } = useContext(ProductContext);
-  const [product, setProduct] = useState<ProductForm | null>({
+  const [product, setProduct] = useState<ProductForm>({
     name: "",
     price: 0,
     description: "",
@@ -14,12 +14,6 @@ const NewProduct = () => {
     author: "",
     publisher: "",
     stock: 0,
-    // images: [
-    //   {
-    //     public_id: "",
-    //     url: "",
-    //   },
-    // ],
   });
   const changeHander = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
