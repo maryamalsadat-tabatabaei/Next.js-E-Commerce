@@ -9,7 +9,12 @@ export default withAuth(
     const user = req?.nextauth?.token?.user as User;
     const userRole = user?.role;
 
-    if (url.startsWith("/api")) {
+    if (
+      url.startsWith("/api") ||
+      url.startsWith("/register") ||
+      url.startsWith("/login") ||
+      url.startsWith("/cart")
+    ) {
       NextResponse.next().headers.append("Access-Control-Allow-Origin", "*");
     }
 
