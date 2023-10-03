@@ -1,11 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { ProductModel } from "../models";
+import { OrderModel, ProductModel } from "../models";
 import APIFilters from "../utils/APIFilters";
 import Product from "@/interfaces/product";
 import { CustomNextApiRequest } from "@/interfaces/user";
 import { cloudinary, uploads } from "../utils/cloudinary";
 import fs from "fs";
 import ErrorHandler from "../utils/errorHandler";
+import { formatStatsDate } from "@/helpers/formatDate";
+import { Types } from "mongoose";
 
 interface CustomQuery {
   [key: string]: string;
@@ -213,5 +215,154 @@ export const createProductReview = async (
     res.status(200).json({
       success: true,
     });
+  }
+};
+
+async function getTopPurchasedProducts(
+  req: CustomNextApiRequest,
+  res: NextApiResponse,
+  next: Function
+) {
+  const numberPerPage = 2;
+  let currentPage = Math.max(1, parseInt(req.query.page as string, 10)) || 1;
+  const skip = (currentPage - 1) * numberPerPage;
+
+  const lastMonth = new Date();
+  lastMonth.setMonth(lastMonth.getMonth() - 1);
+
+  const result = await OrderModel.aggregate([
+    {
+      $match: {
+        createdAt: { $gte: lastMonth },
+        orderStatus: "Delivered",
+      },
+    },
+    {
+      $unwind: "$orderItems",
+    },
+    {
+      $group: {
+        _id: "$orderItems.product",
+        totalQuantity: { $sum: "$orderItems.quantity" },
+      },
+    },
+    {
+      $sort: { totalQuantity: -1 },
+    },
+    {
+      $limit: 10,
+    },
+    // {
+    //   $skip: skip,
+    // },
+    // {
+    //   $limit: numberPerPage,
+    // },
+  ]);
+  // Get the total count of top products
+  const productsCount = Math.min(result.length, 10);
+
+  let topProducts = await Promise.all(
+    result.map(async (item) => {
+      const product = await ProductModel.findById(item._id);
+      return { ...product?.toObject(), totalQuantity: item.totalQuantity };
+    })
+  );
+  topProducts = topProducts.slice(skip, currentPage * numberPerPage);
+
+  res.status(200).json({
+    topProducts,
+    productsCount,
+    numberPerPage,
+  });
+}
+
+export default getTopPurchasedProducts;
+
+export const getStats = async (
+  req: CustomNextApiRequest,
+  res: NextApiResponse,
+  next: Function
+) => {
+  const userId = req?.user?._id;
+  const lastMonth = new Date();
+  lastMonth.setMonth(lastMonth.getMonth() - 6);
+
+  try {
+    const purchasedProductIds = await OrderModel.aggregate([
+      {
+        $match: {
+          createdAt: { $gte: lastMonth },
+          orderStatus: { $in: ["Processing", "Shipped", "Delivered"] },
+        },
+      },
+      {
+        $unwind: "$orderItems",
+      },
+      {
+        $group: {
+          _id: "$orderItems.product",
+          totalQuantity: { $sum: "$orderItems.quantity" },
+        },
+      },
+      {
+        $sort: { totalQuantity: -1 },
+      },
+      {
+        $limit: 10,
+      },
+    ]);
+
+    const purchasedProductIdsArray = purchasedProductIds.map(
+      (item) => new Types.ObjectId(item._id)
+    );
+
+    const showStats = await ProductModel.aggregate([
+      {
+        $match: { _id: { $in: purchasedProductIdsArray } },
+      },
+      { $group: { _id: "$category", count: { $sum: 1 } } },
+      {
+        $sort: { totalQuantity: -1 },
+      },
+    ]);
+
+    const defaultStats = showStats.reduce((acc, curr) => {
+      const { _id: category, count } = curr;
+      acc[category] = count;
+      return acc;
+    }, {});
+
+    let monthlyStats = await ProductModel.aggregate([
+      { $match: { _id: { $in: purchasedProductIdsArray } } },
+      {
+        $group: {
+          _id: {
+            year: { $year: "$createdAt" },
+            month: { $month: "$createdAt" },
+          },
+          count: { $sum: 1 },
+        },
+      },
+      { $sort: { "_id.year": -1, "_id.month": -1 } },
+      { $limit: 6 },
+    ]);
+
+    monthlyStats = monthlyStats.map((item) => {
+      const {
+        _id: { year, month },
+        count,
+      } = item;
+      const formattedDate = formatStatsDate(new Date(year, month - 1));
+      return { date: formattedDate, count };
+    });
+
+    res.status(200).json({
+      defaultStats,
+      monthlyStats,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };

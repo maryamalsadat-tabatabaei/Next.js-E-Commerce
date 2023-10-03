@@ -24,7 +24,7 @@ const UserProfileInfo = () => {
       <figcaption>
         <h5 className="font-semibold text-lg">{user?.name}</h5>
         <div>
-          <b>Email:</b> {user?.email}| <b>Joined On:</b>
+          <b>Email:</b> {user?.email} | <b>Joined On: {""}</b>
           {formatDate(user?.createdAt as string | undefined)}
         </div>
       </figcaption>

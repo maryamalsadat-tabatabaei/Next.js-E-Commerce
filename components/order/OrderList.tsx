@@ -38,11 +38,14 @@ const OrderList = ({ orders }: { orders: Orders }) => {
           There is no order yet!
         </main>
       )}
-
-      <CustomPagination
-        numberPerPage={orders?.numberPerPage}
-        productsCount={orders?.ordersCount}
-      />
+      {orders?.ordersCount > orders?.numberPerPage && (
+        <div className="mb-4">
+          <CustomPagination
+            numberPerPage={orders?.numberPerPage}
+            productsCount={orders?.ordersCount}
+          />
+        </div>
+      )}
     </>
   );
 };

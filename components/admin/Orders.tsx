@@ -77,12 +77,14 @@ const Orders = ({ orders }: { orders: OrdersType }) => {
           ))}
         </tbody>
       </table>
-      <div className="mb-6">
-        <CustomPagination
-          numberPerPage={orders?.numberPerPage}
-          productsCount={orders?.ordersCount}
-        />
-      </div>
+      {orders?.ordersCount > orders?.numberPerPage && (
+        <div className="mb-4">
+          <CustomPagination
+            numberPerPage={orders?.numberPerPage}
+            productsCount={orders?.ordersCount}
+          />
+        </div>
+      )}
     </div>
   );
 };

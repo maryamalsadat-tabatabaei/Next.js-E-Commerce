@@ -33,7 +33,7 @@ const getProducts = async (searchParams: {
   return data;
 };
 
-export default async function Home({
+export default async function HomeProductsPage({
   searchParams,
 }: {
   searchParams: {

@@ -71,7 +71,7 @@ const Reviews = ({
         ))}
       </div>
       {reviewsCount > numberPerPage && (
-        <div className="mb-4 ">
+        <div className="mb-4">
           <CustomPagination
             numberPerPage={numberPerPage}
             productsCount={reviewsCount}

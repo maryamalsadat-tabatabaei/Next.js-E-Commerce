@@ -81,7 +81,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
       );
       if (data?.user) {
         setUser(data?.user);
-        router.push("/");
+        router.push("/login");
       }
     } catch (err) {
       if (axios.isAxiosError(err) && err.response?.data?.message) {
@@ -122,7 +122,6 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
       );
       if (data?.user) {
-        console.log("userrrrrr", data?.user);
         loadUser();
         setLoading(false);
       }

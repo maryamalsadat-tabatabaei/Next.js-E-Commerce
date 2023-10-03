@@ -77,7 +77,7 @@ const Users = ({ users }: { users: UsersType }) => {
         </tbody>
       </table>
       {users?.usersCount > users?.numberPerPage && (
-        <div className="mb-6">
+        <div className="mb-4">
           <CustomPagination
             numberPerPage={users?.numberPerPage}
             productsCount={users?.usersCount}

@@ -96,12 +96,14 @@ const Products = ({ data }: { data: Products }) => {
           })}
         </tbody>
       </table>
-      <div className="mb-6">
-        <CustomPagination
-          numberPerPage={data?.numberPerPage}
-          productsCount={data?.filteredProductsCount}
-        />
-      </div>
+      {data?.filteredProductsCount > data?.numberPerPage && (
+        <div className="mb-4">
+          <CustomPagination
+            numberPerPage={data?.numberPerPage}
+            productsCount={data?.filteredProductsCount}
+          />
+        </div>
+      )}
     </div>
   );
 };
