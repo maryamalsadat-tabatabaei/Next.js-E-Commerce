@@ -1,5 +1,4 @@
 import Link from "next/link";
-// import UserAddresses from "../user/UserAddresses";
 import UserProfileInfo from "./UserProfileInfo";
 import { FaPlus } from "react-icons/fa";
 import Address from "@/interfaces/address";
@@ -23,7 +22,6 @@ const Profile = ({ userAddressList }: { userAddressList: Address[] }) => {
         <FaPlus className="mr-1" />
         Add new address
       </Link>
-      <hr className="my-4" />
     </>
   );
 };

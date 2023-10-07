@@ -12,6 +12,7 @@ export const createAddress = async (
   if (req.user) {
     addressBody.user = req.user._id;
   }
+  console.log("addressBody", addressBody);
   const address = await AddressModel.create(addressBody);
 
   res.status(201).json({

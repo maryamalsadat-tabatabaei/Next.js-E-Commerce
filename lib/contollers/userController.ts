@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { UserModel } from "../models";
+import { OrderModel, UserModel } from "../models";
 import User, { UpdatePasswordForm } from "@/interfaces/user";
 import { uploads } from "../utils/cloudinary";
 import { CustomNextApiRequest } from "@/interfaces/user";
@@ -164,6 +164,100 @@ export const deleteUser = async (
 
     res.status(200).json({
       success: true,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+export const getTopUsers = async (
+  req: any,
+  res: NextApiResponse,
+  next: Function
+) => {
+  try {
+    const topUsersByQuantity = await OrderModel.aggregate([
+      {
+        $unwind: "$orderItems",
+      },
+      {
+        $group: {
+          _id: "$user",
+          totalQuantity: { $sum: "$orderItems.quantity" },
+        },
+      },
+      {
+        $sort: {
+          totalQuantity: -1,
+        },
+      },
+      {
+        $limit: 10,
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "_id",
+          foreignField: "_id",
+          as: "userDetails",
+        },
+      },
+      {
+        $unwind: "$userDetails",
+      },
+      {
+        $project: {
+          _id: 0, //"$_id"
+          totalQuantity: "$totalQuantity", //1
+          email: "$userDetails.email",
+        },
+      },
+    ]);
+
+    const topUsersByPrice = await OrderModel.aggregate([
+      {
+        $unwind: "$orderItems",
+      },
+      {
+        $group: {
+          _id: "$user",
+          totalPrice: {
+            $sum: { $multiply: ["$orderItems.quantity", "$orderItems.price"] },
+          },
+        },
+      },
+      {
+        $sort: {
+          totalPrice: -1,
+        },
+      },
+      {
+        $limit: 10,
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "_id",
+          foreignField: "_id",
+          as: "userDetails",
+        },
+      },
+      {
+        $unwind: "$userDetails",
+      },
+      {
+        $project: {
+          _id: 0, //"$_id"
+          totalPrice: "$totalPrice", //1
+          email: "$userDetails.email",
+        },
+      },
+    ]);
+
+    res.status(200).json({
+      topUsersByQuantity,
+      topUsersByPrice,
     });
   } catch (error) {
     console.error(error);

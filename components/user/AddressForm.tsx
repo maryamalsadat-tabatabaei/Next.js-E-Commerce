@@ -1,6 +1,6 @@
 "use client";
 import BreadCrumbs from "../layouts/BreadCrumbs";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import Sidebar from "../layouts/Sidebar";
 import { countries } from "countries-list";
 import { Form, Formik, Field } from "formik";
@@ -8,16 +8,19 @@ import validator from "validator";
 import { FormAddress } from "@/interfaces/address";
 import { AuthContext } from "@/context/AuthContext";
 import { toast } from "react-toastify";
+import MapboxMap from "./AddressMap";
 
 interface Country {
   name: string;
   code: string;
-  // Add other properties as needed
 }
 const AddressForm = () => {
   const { error, addNewUserAddress, clearErrors, setUpdated, updated } =
     useContext(AuthContext);
-
+  const [location, setLocation] = useState<{ [x: string]: number }>({
+    latitude: 37.8,
+    longitude: -122.4,
+  });
   const countriesList: Country[] = Object.values(countries);
   const validateForm = (values: FormAddress) => {
     const errors: {
@@ -90,11 +93,13 @@ const AddressForm = () => {
     }
   }, [error, updated, setUpdated, clearErrors]);
 
+  const locationHandler = ({ ...location }) => {
+    setLocation(location);
+  };
+
   const submitHandler = (values: FormAddress) => {
     // e.preventDefault();
-
-    console.log("values", values);
-    addNewUserAddress({ ...values });
+    addNewUserAddress({ ...values }, location);
   };
   const breadCrumbList = [
     {
@@ -282,6 +287,10 @@ const AddressForm = () => {
                         </div>
                       ) : null}
                     </div>
+                    <MapboxMap
+                      onLocationChange={locationHandler}
+                      location={location}
+                    />
 
                     <div className="form-group">
                       <button

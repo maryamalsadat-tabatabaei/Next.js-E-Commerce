@@ -1,6 +1,6 @@
 "use client";
 import BreadCrumbs from "../layouts/BreadCrumbs";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import Sidebar from "../layouts/Sidebar";
 import { countries } from "countries-list";
 import { Form, Formik, Field } from "formik";
@@ -8,6 +8,7 @@ import validator from "validator";
 import Address, { FormAddress } from "@/interfaces/address";
 import { AuthContext } from "@/context/AuthContext";
 import { toast } from "react-toastify";
+import MapboxMap from "./AddressMap";
 
 interface Country {
   name: string;
@@ -30,7 +31,12 @@ const UpdateAddress = ({
     updateAddress,
     deleteAddress,
   } = useContext(AuthContext);
-
+  console.log("adresssssssssssss", address);
+  const [location, setLocation] = useState<{ [x: string]: number }>({
+    latitude: address?.location?.latitude,
+    longitude: address?.location?.longitude,
+  });
+  console.log("location", location);
   const countriesList: Country[] = Object.values(countries);
   const validateForm = (values: FormAddress) => {
     const errors: {
@@ -89,10 +95,14 @@ const UpdateAddress = ({
     }
   }, [error, updated, deleted, clearErrors, setUpdated, setDeleted]);
 
+  const locationHandler = ({ ...location }) => {
+    setLocation(location);
+  };
+
   const submitHandler = (values: FormAddress) => {
     // e.preventDefault();
 
-    updateAddress(addressId, values);
+    updateAddress(addressId, values, location);
   };
   const deleteHandler = (addressId: string) => {
     deleteAddress(addressId);
@@ -283,6 +293,10 @@ const UpdateAddress = ({
                         </div>
                       ) : null}
                     </div>
+                    <MapboxMap
+                      onLocationChange={locationHandler}
+                      location={address?.location}
+                    />
 
                     <div className="grid md:grid-cols-2 gap-x-3">
                       <button

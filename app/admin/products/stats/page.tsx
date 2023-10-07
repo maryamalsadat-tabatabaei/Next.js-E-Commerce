@@ -2,7 +2,7 @@ import axios from "axios";
 import { cookies } from "next/headers";
 import { getCookieName } from "@/helpers/getCookieName";
 import PieChart from "@/components/products/stats/PieChart";
-import BarChartComponent from "@/components/products/stats/BarChart";
+import BarChart from "@/components/products/stats/BarChart";
 
 const getStats = async () => {
   const nextCookies = cookies();
@@ -31,7 +31,7 @@ export default async function StatsPage() {
   return (
     <>
       {/* <h4 className="text-center mb-3">Monthly Purchase</h4> */}
-      <BarChartComponent monthlyStats={data?.monthlyStats} />
+      <BarChart monthlyStats={data?.monthlyStats} />
       <PieChart defaultStats={data?.defaultStats} />
     </>
   );

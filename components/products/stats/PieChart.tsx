@@ -14,11 +14,12 @@ const PieChart = ({
   defaultStats,
 }: {
   defaultStats: {
-    [category: string]: number;
-  };
+    category: string;
+    totalQuantity: number;
+  }[];
 }) => {
-  const labels = Object.keys(defaultStats);
-  const data = Object.values(defaultStats);
+  const labels = defaultStats?.map((item) => item.category);
+  const data = defaultStats?.map((item) => item.totalQuantity);
 
   const chartData = {
     labels,
@@ -26,10 +27,13 @@ const PieChart = ({
       {
         data: data,
         backgroundColor: [
-          "rgba(255,99,132,1)",
-          "rgba(54,162,235,1)",
-          "rgba(255,206,86,1)",
-          "rgba(75,192,192,1)",
+          "#FF6384",
+          "#36A2EB",
+          "#FFCE56",
+          "#4BC0C0",
+          "#9966FF",
+          "#FF9F40",
+          "#FFD700",
         ],
         borderWidth: 1,
       },

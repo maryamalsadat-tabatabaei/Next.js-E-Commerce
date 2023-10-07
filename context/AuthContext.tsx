@@ -16,9 +16,16 @@ export interface AuthContextProps {
   deleted: boolean;
   registerUser: (user: UserForm) => void;
   clearErrors: () => void;
-  addNewUserAddress: (address: FormAddress) => void;
+  addNewUserAddress: (
+    address: FormAddress,
+    location: { [x: string]: number }
+  ) => void;
   updatePassword: (formPassword: UpdatePasswordForm) => void;
-  updateAddress: (addressId: string, address: FormAddress) => void;
+  updateAddress: (
+    addressId: string,
+    address: FormAddress,
+    location: { [x: string]: number }
+  ) => void;
   deleteAddress: (addressId: string) => void;
   updateProfile: (formData: FormData) => void;
   updateUser: (
@@ -47,9 +54,9 @@ const initialAuthContext = {
   setUser: () => {},
   setUpdated: () => false,
   setDeleted: () => false,
-  addNewUserAddress: (address: FormAddress) => {},
+  addNewUserAddress: (address: FormAddress, location: {}) => {},
   updatePassword: (formPassword: UpdatePasswordForm) => {},
-  updateAddress: (addressId: string, address: FormAddress) => {},
+  updateAddress: (addressId: string, address: FormAddress, location: {}) => {},
   deleteAddress: (addressId: string) => {},
   updateProfile: (formData: FormData) => {},
   updateUser: (
@@ -156,8 +163,13 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   const clearErrors = () => {
     setError(null);
   };
-  const addNewUserAddress = async ({ ...address }: FormAddress) => {
+  const addNewUserAddress = async (
+    { ...address }: FormAddress,
+    location: { [x: string]: number }
+  ) => {
     try {
+      const combinedObject = { ...address, location };
+      address = Object.assign({}, combinedObject);
       const { data } = await axios.post(
         `${process.env.API_URL}/api/address`,
         address
@@ -175,8 +187,14 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
     }
   };
-  const updateAddress = async (addressId: string, address: FormAddress) => {
+  const updateAddress = async (
+    addressId: string,
+    address: FormAddress,
+    location: { [x: string]: number }
+  ) => {
     try {
+      const combinedObject = { ...address, location };
+      address = Object.assign({}, combinedObject);
       const { data } = await axios.put(
         `${process.env.API_URL}/api/address/${addressId}`,
         address

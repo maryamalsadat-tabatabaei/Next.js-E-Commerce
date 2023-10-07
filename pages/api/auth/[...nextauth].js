@@ -17,13 +17,13 @@ export default async function auth(req, res) {
       GoogleProvider({
         clientId: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        // authorization: {
-        //   params: {
-        //     prompt: "consent",
-        //     access_type: "offline",
-        //     response_type: "code",
-        //   },
-        // },
+        authorization: {
+          params: {
+            prompt: "consent",
+            access_type: "offline",
+            response_type: "code",
+          },
+        },
       }),
       GitHubProvider({
         clientId: process.env.GITHUB_ID,

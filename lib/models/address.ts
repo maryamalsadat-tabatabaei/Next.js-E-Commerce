@@ -21,6 +21,12 @@ class Address {
   @prop({ required: true })
   country!: string;
 
+  @prop({ required: true })
+  location!: {
+    latitude: number;
+    longitude: number;
+  };
+
   @prop({ ref: () => User, required: true })
   user!: Ref<User>;
 

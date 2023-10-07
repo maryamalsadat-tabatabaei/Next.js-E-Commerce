@@ -10,6 +10,10 @@ interface Address {
   phoneNo: string;
   zipCode: string;
   country: string;
+  location: {
+    latitude: number;
+    longitude: number;
+  };
   user: Ref<User>;
   createdAt?: Date;
 }

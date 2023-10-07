@@ -37,7 +37,8 @@ const ShippingSummery = () => {
               <div className="block relative w-20 h-20 rounded p-1 border border-gray-200">
                 <Image
                   className="50"
-                  height="50"
+                  height={80}
+                  width={80}
                   src={item.image}
                   alt="Title"
                 />

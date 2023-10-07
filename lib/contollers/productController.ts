@@ -6,8 +6,6 @@ import { CustomNextApiRequest } from "@/interfaces/user";
 import { cloudinary, uploads } from "../utils/cloudinary";
 import fs from "fs";
 import ErrorHandler from "../utils/errorHandler";
-import { formatStatsDate } from "@/helpers/formatDate";
-import { Types } from "mongoose";
 
 interface CustomQuery {
   [key: string]: string;
@@ -279,20 +277,84 @@ async function getTopPurchasedProducts(
 
 export default getTopPurchasedProducts;
 
+export const getLeastPopularProducts = async (
+  req: CustomNextApiRequest,
+  res: NextApiResponse,
+  next: Function
+) => {
+  try {
+    const leastPopularProducts = await ProductModel.aggregate([
+      {
+        $lookup: {
+          from: "orders",
+          localField: "_id",
+          foreignField: "orderItems.product",
+          as: "orderItems",
+        },
+      },
+      {
+        $addFields: {
+          purchaseCount: { $size: "$orderItems" },
+        },
+      },
+      {
+        $match: {
+          purchaseCount: { $lte: 1 },
+        },
+      },
+      {
+        $sort: {
+          createdAt: 1,
+          price: -1,
+        },
+      },
+      {
+        $limit: 10,
+      },
+    ]);
+
+    res.status(200).json({
+      leastPopularProducts,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+export const getRecentProducts = async (
+  req: CustomNextApiRequest,
+  res: NextApiResponse,
+  next: Function
+) => {
+  try {
+    const recentProducts = await ProductModel.find({})
+      .sort({ createdAt: -1, price: -1 })
+      .limit(10);
+
+    res.status(200).json({
+      recentProducts,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
 export const getStats = async (
   req: CustomNextApiRequest,
   res: NextApiResponse,
   next: Function
 ) => {
   const userId = req?.user?._id;
-  const lastMonth = new Date();
-  lastMonth.setMonth(lastMonth.getMonth() - 6);
-
+  const lastSixMonths = new Date();
+  lastSixMonths.setMonth(lastSixMonths.getMonth() - 6);
+  console.log("lastSixMonths", lastSixMonths);
   try {
-    const purchasedProductIds = await OrderModel.aggregate([
+    const categoryStats = await OrderModel.aggregate([
       {
         $match: {
-          createdAt: { $gte: lastMonth },
+          createdAt: { $gte: lastSixMonths },
           orderStatus: { $in: ["Processing", "Shipped", "Delivered"] },
         },
       },
@@ -301,64 +363,84 @@ export const getStats = async (
       },
       {
         $group: {
-          _id: "$orderItems.product",
+          _id: "$orderItems.category",
           totalQuantity: { $sum: "$orderItems.quantity" },
         },
       },
       {
         $sort: { totalQuantity: -1 },
       },
+      // {
+      //   $limit: 10,
+      // },
       {
-        $limit: 10,
+        $project: {
+          category: "$_id",
+          totalQuantity: 1,
+          _id: 0,
+        },
       },
     ]);
 
-    const purchasedProductIdsArray = purchasedProductIds.map(
-      (item) => new Types.ObjectId(item._id)
-    );
-
-    const showStats = await ProductModel.aggregate([
+    console.log("categoryStats", categoryStats);
+    const monthlyStats = await OrderModel.aggregate([
       {
-        $match: { _id: { $in: purchasedProductIdsArray } },
+        $match: {
+          createdAt: { $gte: lastSixMonths },
+          orderStatus: { $in: ["Processing", "Shipped", "Delivered"] },
+        },
       },
-      { $group: { _id: "$category", count: { $sum: 1 } } },
       {
-        $sort: { totalQuantity: -1 },
+        $unwind: "$orderItems",
       },
-    ]);
-
-    const defaultStats = showStats.reduce((acc, curr) => {
-      const { _id: category, count } = curr;
-      acc[category] = count;
-      return acc;
-    }, {});
-
-    let monthlyStats = await ProductModel.aggregate([
-      { $match: { _id: { $in: purchasedProductIdsArray } } },
       {
         $group: {
           _id: {
-            year: { $year: "$createdAt" },
             month: { $month: "$createdAt" },
           },
-          count: { $sum: 1 },
+          totalQuantity: { $sum: "$orderItems.quantity" },
         },
       },
-      { $sort: { "_id.year": -1, "_id.month": -1 } },
-      { $limit: 6 },
+      // {
+      //   $project: {
+      //     _id: 0,
+      //     month: "$_id.month",
+      //     totalQuantity: 1,
+      //   },
+      // },
+      {
+        $project: {
+          _id: 0,
+          month: {
+            $switch: {
+              branches: [
+                { case: { $eq: ["$_id.month", 1] }, then: "Jan" },
+                { case: { $eq: ["$_id.month", 2] }, then: "Feb" },
+                { case: { $eq: ["$_id.month", 3] }, then: "Mar" },
+                { case: { $eq: ["$_id.month", 4] }, then: "Apr" },
+                { case: { $eq: ["$_id.month", 5] }, then: "May" },
+                { case: { $eq: ["$_id.month", 6] }, then: "Jun" },
+                { case: { $eq: ["$_id.month", 7] }, then: "Jul" },
+                { case: { $eq: ["$_id.month", 8] }, then: "Aug" },
+                { case: { $eq: ["$_id.month", 9] }, then: "Sep" },
+                { case: { $eq: ["$_id.month", 10] }, then: "Oct" },
+                { case: { $eq: ["$_id.month", 11] }, then: "Nov" },
+                { case: { $eq: ["$_id.month", 12] }, then: "Dec" },
+              ],
+              default: "Invalid Month",
+            },
+          },
+          totalQuantity: 1,
+        },
+      },
+      {
+        $sort: { month: 1 },
+      },
     ]);
-
-    monthlyStats = monthlyStats.map((item) => {
-      const {
-        _id: { year, month },
-        count,
-      } = item;
-      const formattedDate = formatStatsDate(new Date(year, month - 1));
-      return { date: formattedDate, count };
-    });
+    console.log("monthlyStats", monthlyStats);
 
     res.status(200).json({
-      defaultStats,
+      defaultStats: categoryStats,
       monthlyStats,
     });
   } catch (error) {
