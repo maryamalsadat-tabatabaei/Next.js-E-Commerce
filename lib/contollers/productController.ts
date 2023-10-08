@@ -221,7 +221,7 @@ async function getTopPurchasedProducts(
   res: NextApiResponse,
   next: Function
 ) {
-  const numberPerPage = 2;
+  const numberPerPage = 10;
   let currentPage = Math.max(1, parseInt(req.query.page as string, 10)) || 1;
   const skip = (currentPage - 1) * numberPerPage;
 
@@ -266,12 +266,12 @@ async function getTopPurchasedProducts(
       return { ...product?.toObject(), totalQuantity: item.totalQuantity };
     })
   );
-  topProducts = topProducts.slice(skip, currentPage * numberPerPage);
+  // topProducts = topProducts.slice(skip, currentPage * numberPerPage);
 
   res.status(200).json({
     topProducts,
-    productsCount,
-    numberPerPage,
+    // productsCount,
+    // numberPerPage,
   });
 }
 
@@ -283,7 +283,7 @@ export const getLeastPopularProducts = async (
   next: Function
 ) => {
   try {
-    const leastPopularProducts = await ProductModel.aggregate([
+    const onsaleProducts = await ProductModel.aggregate([
       {
         $lookup: {
           from: "orders",
@@ -314,7 +314,7 @@ export const getLeastPopularProducts = async (
     ]);
 
     res.status(200).json({
-      leastPopularProducts,
+      onsaleProducts,
     });
   } catch (error) {
     console.error(error);

@@ -28,6 +28,16 @@ const nextConfig = {
       "pk.eyJ1IjoibWFyaTcwIiwiYSI6ImNrdW1xZHJxZzE1ZW0yem1iYzl6Y2s0a3kifQ.Q4ZacWgSqFlrJ1cd_wQXqQ",
   },
   images: { domains: ["res.cloudinary.com"] },
+  // images: {
+  //   remotePatterns: [
+  //     {
+  //       protocol: "https",
+  //       hostname: "fakestoreapi.com",
+  //       port: "",
+  //       pathname: "/img/**",
+  //     },
+  //   ],
+  // },
   async headers() {
     return [
       {

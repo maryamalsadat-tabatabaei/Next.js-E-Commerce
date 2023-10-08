@@ -33,13 +33,16 @@ const MapboxMap = ({
   });
 
   const [showPopup, setShowPopup] = useState<boolean>(false);
-  const updateMarkerPosition = useCallback((latitude: any, longitude: any) => {
-    setMarker({
-      latitude,
-      longitude,
-    });
-    onLocationChange({ latitude, longitude });
-  }, []);
+  const updateMarkerPosition = useCallback(
+    (latitude: any, longitude: any) => {
+      setMarker({
+        latitude,
+        longitude,
+      });
+      onLocationChange({ latitude, longitude });
+    },
+    [onLocationChange]
+  );
 
   const manualMarkerUpdateHandler = useCallback(
     (event: MarkerDragEvent) => {

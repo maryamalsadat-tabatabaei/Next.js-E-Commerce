@@ -20,6 +20,18 @@ export default function RootLayout({
         <GlobalProvider>
           <Header />
           {children}
+          <footer
+            className="text-center p-3"
+            style={{ backgroundColor: "rgba(0, 0, 0, 0.2)" }}
+          >
+            &copy; {new Date().getFullYear()} Copyright:{" "}
+            <a
+              className="text-dark"
+              href="https://vercel.com/maryamalsadat-tabatabaei/next-js-e-commerce"
+            >
+              BookShop.com
+            </a>
+          </footer>
         </GlobalProvider>
       </body>
     </html>

@@ -37,35 +37,6 @@ const Sidebar = () => {
             <li>
               {" "}
               <Link
-                href="/admin/products/top-purchased"
-                className="block px-3 py-2 text-gray-800 hover:bg-blue-100 hover:text-blue-500 rounded-md"
-              >
-                Top Products <span className="text-red-500">(Admin)</span>
-              </Link>
-            </li>
-            <li>
-              {" "}
-              <Link
-                href="/admin/products/least-popular"
-                className="block px-3 py-2 text-gray-800 hover:bg-blue-100 hover:text-blue-500 rounded-md"
-              >
-                Least Popular Products{" "}
-                <span className="text-red-500">(Admin)</span>
-              </Link>
-            </li>
-            <li>
-              {" "}
-              <Link
-                href="/admin/products/most-recent"
-                className="block px-3 py-2 text-gray-800 hover:bg-blue-100 hover:text-blue-500 rounded-md"
-              >
-                Most Recent Products{" "}
-                <span className="text-red-500">(Admin)</span>
-              </Link>
-            </li>
-            <li>
-              {" "}
-              <Link
                 href="/admin/products/stats"
                 className="block px-3 py-2 text-gray-800 hover:bg-blue-100 hover:text-blue-500 rounded-md"
               >

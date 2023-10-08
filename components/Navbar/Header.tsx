@@ -53,6 +53,12 @@ const Header = () => {
 
           <div className="flex items-center space-x-2 ml-auto">
             <Link
+              href="/products"
+              className="transform transition-transform flex items-center px-3 py-2 text-center text-gray-700 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 hover:border-gray-300"
+            >
+              Products
+            </Link>
+            <Link
               href="/cart"
               className="transform transition-transform flex items-center px-3 py-2 text-center text-gray-700 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 hover:border-gray-300"
             >

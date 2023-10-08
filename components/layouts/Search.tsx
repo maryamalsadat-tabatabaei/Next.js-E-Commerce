@@ -13,7 +13,7 @@ const Search = () => {
     if (!keyword) {
       router.push("/");
     } else {
-      router.push(`/?keyword=${keyword}`);
+      router.push(`/products?keyword=${keyword}`);
     }
   };
   return (
