@@ -56,9 +56,9 @@ const BarChart = ({ monthlyStats }: { monthlyStats: MonthyStatsProps[] }) => {
   };
 
   return (
-    <div className="relative mb-8">
-      <div className="text-center font-bold text-xl mb-4">Monthly Purchase</div>
-      <div className="w-[70%] mx-auto flex justify-center">
+    <div className="relative mb-8 text-center">
+      <div className="font-bold text-xl mb-4">Monthly Purchase</div>
+      <div className="w-full max-w-lg mx-auto h-auto">
         <Bar data={chartData} options={options} />
       </div>
     </div>

@@ -27,8 +27,8 @@ const AddressList = ({ address }: { address: Address }) => {
   }, [userAddress, setUserLocation, address.location]);
 
   return (
-    <div className="flex justify-between flex-1 bg-gray-100 mb-4">
-      <div className="gap-4 my-auto w-1/2">
+    <div className="flex flex-col sm:flex-row bg-gray-100 mb-4">
+      <div className="w-full sm:w-1/2 p-4">
         <Link href={`/address/${address._id}`}>
           <figure className="w-full flex align-center bg-gray-100 p-4 rounded-md cursor-pointer">
             <div className="mr-3">
@@ -48,7 +48,7 @@ const AddressList = ({ address }: { address: Address }) => {
           </figure>
         </Link>
       </div>
-      <div className="w-1/2">
+      <div className="w-full sm:w-1/2 p-4">
         <UserAddressMap {...userLocation} />
       </div>
     </div>

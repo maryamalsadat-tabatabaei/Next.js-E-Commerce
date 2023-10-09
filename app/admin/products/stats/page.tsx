@@ -29,10 +29,9 @@ export default async function StatsPage() {
   const data = await getStats();
 
   return (
-    <>
-      {/* <h4 className="text-center mb-3">Monthly Purchase</h4> */}
+    <div className="flex flex-col lg:flex-row justify-center gap-4">
       <BarChart monthlyStats={data?.monthlyStats} />
       <PieChart defaultStats={data?.defaultStats} />
-    </>
+    </div>
   );
 }

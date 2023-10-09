@@ -16,10 +16,12 @@ const ProductDetail = ({
   product,
   reviewsCount,
   numberPerPage,
+  onSale = false,
 }: {
   product: Product;
   reviewsCount: number;
   numberPerPage: number;
+  onSale?: boolean;
 }) => {
   const router = useRouter();
   const { addItemToCart } = useContext(CartContext);
@@ -74,7 +76,7 @@ const ProductDetail = ({
         <div className="container max-w-screen-xl mx-auto px-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 mb-5">
             <aside>
-              <div className="border border-gray-200 shadow-sm p-3 text-center rounded mb-5">
+              <div className="border border-gray-200 shadow-sm p-3 text-center rounded mb-5 relative">
                 <Image
                   className="object-cover inline-block"
                   ref={imageRef}
@@ -87,7 +89,13 @@ const ProductDetail = ({
                   width="340"
                   height="340"
                 />
+                {onSale && (
+                  <span className="absolute top-0 left-0 m-2 rounded-full bg-red-600 px-2 text-sm font-medium text-white">
+                    40% OFF
+                  </span>
+                )}
               </div>
+
               <div className="space-x-2 overflow-auto text-center whitespace-nowrap">
                 {product?.images?.map((img) => (
                   <a
@@ -134,7 +142,24 @@ const ProductDetail = ({
                 <span className="text-green-500">Verified</span>
               </div>
 
-              <p className="mb-4 font-semibold text-xl">${product?.price}</p>
+              <p className="mb-4">
+                {" "}
+                {onSale ? (
+                  <>
+                    <span className="text-3xl font-bold text-slate-900">
+                      ${(product?.price * 0.6).toFixed()}
+                    </span>
+
+                    <span className="text-sm text-slate-900 line-through">
+                      ${(product?.price).toFixed()}
+                    </span>
+                  </>
+                ) : (
+                  <span className="text-3xl font-bold text-slate-900">
+                    ${product?.price}
+                  </span>
+                )}
+              </p>
 
               <p className="mb-4 text-gray-500">{product?.description}</p>
 

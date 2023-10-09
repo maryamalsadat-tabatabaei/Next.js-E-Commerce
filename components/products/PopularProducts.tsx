@@ -66,7 +66,7 @@ const PopularProducts = ({ topProducts }: { topProducts: Product[] }) => {
             </SwiperSlide>
           ))
         ) : (
-          <main className="flex min-h-screen text-lg font-semibold flex-col items-center justify-between p-24">
+          <main className="flex text-lg font-semibold flex-col items-center justify-between p-24">
             No product found
           </main>
         )}

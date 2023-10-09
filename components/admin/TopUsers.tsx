@@ -85,15 +85,15 @@ const UserCharts = ({ data }: { data: DataProps }) => {
     },
   };
   return (
-    <div>
-      <div style={{ display: "flex", justifyContent: "space-around" }}>
-        <div style={{ width: "45%" }}>
+    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="p-4">
           <h2 className="font-semibold text-base my-2">
             Top Users by Quantity
           </h2>
           <PolarArea data={polarData} />
         </div>
-        <div style={{ width: "45%" }}>
+        <div className="p-4">
           <h2 className="font-semibold text-base my-2">Top Users by Price</h2>
           <Doughnut data={doughnutData} />
         </div>

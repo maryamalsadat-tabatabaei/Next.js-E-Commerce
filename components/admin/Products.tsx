@@ -33,71 +33,71 @@ const Products = ({ data }: { data: Products }) => {
     deleteProduct(productId);
   };
   return (
-    <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-      <h1 className="text-3xl my-5 ml-4 font-bold">
+    <div className="overflow-x-auto shadow-md rounded-lg">
+      <h1 className="text-2xl sm:text-3xl md:text-4xl my-5 mx-4 font-bold text-center">
         {data?.productsCount} Products
       </h1>
-      <table className="w-full text-sm text-left">
-        <thead className="text-l text-gray-700 uppercase">
-          <tr>
-            <th scope="col" className="px-6 py-3">
-              Name
-            </th>
-            <th scope="col" className="px-6 py-3">
-              Stock
-            </th>
-            <th scope="col" className="px-6 py-3">
-              Price
-            </th>
-            <th scope="col" className="px-6 py-3">
-              Actions
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {data?.products?.map((product) => {
-            return (
-              <Fragment key={product._id.toString()}>
-                <tr className="bg-white">
+      <div className="min-w-full overflow-x-auto">
+        <table className="w-full text-sm text-left border-collapse">
+          <thead className="text-l text-gray-700 uppercase">
+            <tr>
+              <th scope="col" className="px-6 py-3">
+                Name
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Stock
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Price
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {data?.products?.map((product) => (
+              <tr className="bg-white" key={product._id.toString()}>
+                <td className="px-6 py-2">
                   <Link
                     href={`/product/${product._id}`}
                     className="hover:text-blue-600"
                   >
-                    <td className="px-6 py-2">{product?.name}</td>
+                    {product?.name}
                   </Link>
-                  <td className="px-6 py-2">{product?.stock}</td>
-                  <td className="px-6 py-2">${product?.price}</td>
-                  <td className="px-6 py-2">
-                    <>
-                      <Link
-                        href={`/admin/products/${product._id}/upload-images`}
-                        className="px-2 py-2 inline-block text-green-600 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 cursor-pointer mr-2"
-                      >
-                        <FaImage />
-                      </Link>
+                </td>
+                <td className="px-6 py-2">{product?.stock}</td>
+                <td className="px-6 py-2">${product?.price}</td>
+                <td className="px-6 py-2">
+                  <div className="flex">
+                    <Link
+                      href={`/admin/products/${product._id}/upload-images`}
+                      className="px-2 py-2 inline-block text-green-600 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 cursor-pointer mr-2"
+                    >
+                      <FaImage />
+                    </Link>
 
-                      <Link
-                        href={`/admin/products/${product._id}`}
-                        className="px-2 py-2 inline-block text-yellow-600 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 cursor-pointer mr-2"
-                      >
-                        <FaPencilAlt />
-                      </Link>
-                      <a
-                        onClick={() => deleteHandler(product._id)}
-                        className="px-2 py-2 inline-block text-red-600 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 cursor-pointer"
-                      >
-                        <FaTrash />
-                      </a>
-                    </>
-                  </td>
-                </tr>
-              </Fragment>
-            );
-          })}
-        </tbody>
-      </table>
+                    <Link
+                      href={`/admin/products/${product._id}`}
+                      className="px-2 py-2 inline-block text-yellow-600 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 cursor-pointer mr-2"
+                    >
+                      <FaPencilAlt />
+                    </Link>
+                    <a
+                      onClick={() => deleteHandler(product._id)}
+                      className="px-2 py-2 inline-block text-red-600 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 cursor-pointer"
+                    >
+                      <FaTrash />
+                    </a>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
       {data?.filteredProductsCount > data?.numberPerPage && (
-        <div className="mb-4">
+        <div className="mb-4 text-center">
           <CustomPagination
             numberPerPage={data?.numberPerPage}
             productsCount={data?.filteredProductsCount}

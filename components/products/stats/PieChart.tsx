@@ -53,11 +53,9 @@ const PieChart = ({
     },
   };
   return (
-    <div className="relative">
-      <div className="text-center font-bold text-xl mb-4">
-        Category Distribution
-      </div>
-      <div className="w-64 h-64 mx-auto">
+    <div className="relative mb-8 text-center">
+      <div className="font-bold text-xl mb-4">Category Distribution</div>
+      <div className="w-full max-w-sm mx-auto h-auto">
         <Pie data={chartData} options={options} />
       </div>
     </div>

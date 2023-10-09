@@ -25,15 +25,9 @@ const ProductItem = ({ product }: { product: Product }) => {
   };
   return (
     <article className="border border-gray-200 overflow-hidden bg-white shadow-sm rounded mb-5">
-      <div className="flex flex-col md:flex-row">
-        <div className="md:w-1/4 flex p-3">
-          <div
-            style={{
-              width: "80%",
-              height: "70%",
-              position: "relative",
-            }}
-          >
+      <div className="flex flex-col lg:flex-row">
+        <div className="lg:w-1/4 flex justify-center p-3">
+          <div className="w-4/5 lg:w-full h-48 lg:h-auto relative">
             <Image
               src={
                 product?.images[0]
@@ -41,20 +35,20 @@ const ProductItem = ({ product }: { product: Product }) => {
                   : "/images/default_product.png"
               }
               alt={product.name}
-              height="240"
-              width="240"
+              layout="fill"
+              objectFit="contain"
             />
           </div>
         </div>
-        <div className="md:w-2/4">
+        <div className="lg:w-2/4">
           <div className="p-4">
             <Link
               href={`/product/${product._id}`}
               className="hover:text-blue-600"
             >
-              {product.name}
+              <h2 className="text-xl font-semibold mb-2">{product.name}</h2>
             </Link>
-            <div className="flex flex-wrap items-center space-x-2 mb-2">
+            <div className="flex items-center space-x-2 mb-2">
               <div className="ratings">
                 <div className="my-1">
                   <StarRatings
@@ -65,7 +59,7 @@ const ProductItem = ({ product }: { product: Product }) => {
                     starSpacing="1px"
                     name="rating"
                   />
-                  Star Ratings
+                  <span className="text-gray-500">Star Ratings</span>
                 </div>
               </div>
               <b className="text-gray-300">•</b>
@@ -76,21 +70,19 @@ const ProductItem = ({ product }: { product: Product }) => {
             </p>
           </div>
         </div>
-        <div className="md:w-1/4 border-t lg:border-t-0 lg:border-l border-gray-200">
-          <div className="p-5">
+        <div className="lg:w-1/4 border-t lg:border-t-0 lg:border-l border-gray-200">
+          <div className="p-5 text-center">
             <span className="text-xl font-semibold text-black">
               ${product.price}
             </span>
-
             <p className="text-green-500">Free Shipping</p>
             <div className="my-3">
-              <a
+              <button
                 onClick={addToCartHandler}
-                className="px-4 py-2 inline-block text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 cursor-pointer"
+                className="px-4 py-2 text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 cursor-pointer"
               >
-                {" "}
-                Add to Cart{" "}
-              </a>
+                Add to Cart
+              </button>
             </div>
           </div>
         </div>
