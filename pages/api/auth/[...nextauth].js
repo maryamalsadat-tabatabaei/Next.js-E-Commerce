@@ -60,6 +60,10 @@ export default async function auth(req, res) {
         return token;
       },
       session: async ({ session, token }) => {
+        // const sessionUser = await UserModel.findOne({
+        //   email: session.user.email,
+        // });
+        // session.user.id = sessionUser._id;
         session.user = token.user;
         session.accessToken = token.accessToken;
         delete session?.user?.password;
@@ -67,10 +71,43 @@ export default async function auth(req, res) {
         return session;
       },
       signIn: async ({ account, profile }) => {
+        console.log("//////////profile", profile, "//////////acount", account);
         if (account.provider === "google") {
-          return (
-            profile.email_verified && profile.email.endsWith("@google.com")
-          );
+          try {
+            await dbConnect();
+            const { email, picture, name } = profile;
+            let user;
+            user = await UserModel.findOne({ email });
+            if (!user) {
+              user = await UserModel.create({
+                email,
+                name,
+                avatar: { url: picture },
+              });
+            }
+            return user;
+          } catch (err) {
+            console.log(err);
+            return false;
+          }
+        } else if (account.provider === "github") {
+          try {
+            await dbConnect();
+            const { email, avatar_url, name } = profile;
+            let user;
+            user = await UserModel.findOne({ email });
+            if (!user) {
+              user = await UserModel.create({
+                email,
+                name,
+                avatar: { url: avatar_url },
+              });
+            }
+            return user;
+          } catch (err) {
+            console.log(err);
+            return false;
+          }
         }
         return true;
       },

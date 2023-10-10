@@ -4,7 +4,7 @@ interface User {
   _id?: Types.ObjectId;
   name: string;
   email: string;
-  password: string;
+  password?: string;
   avatar?: {
     public_id?: string;
     url?: string;
@@ -39,7 +39,7 @@ export interface DefaultSessionUser {
 }
 
 export interface UpdatePasswordForm {
-  currentPassword: string;
+  currentPassword?: string;
   newPassword: string;
   confirmPassword: string;
 }

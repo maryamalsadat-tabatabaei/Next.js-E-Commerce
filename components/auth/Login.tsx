@@ -54,6 +54,19 @@ const Login = () => {
       router.push("/");
     }
   };
+  const signInHandler = async (provider: string) => {
+    const data = await signIn(provider, {
+      callbackUrl: callBackUrl ? parseCallbackUrl(callBackUrl) : "/",
+    });
+    if (data?.error) {
+      toast.error(data?.error);
+    }
+
+    if (data?.ok) {
+      router.push("/");
+    }
+  };
+
   return (
     <div
       style={{ maxWidth: "480px" }}
@@ -142,10 +155,16 @@ const Login = () => {
       </Formik>
       <div className="flex justify-center gap-4 text-center mt-5">
         Or signup with
-        <button onClick={() => signIn("google")} className="text-blue-500">
+        <button
+          onClick={() => signInHandler("google")}
+          className="text-blue-500"
+        >
           <FaGoogle />
         </button>
-        <button onClick={() => signIn("github")} className="text-blue-500">
+        <button
+          onClick={() => signInHandler("github")}
+          className="text-blue-500"
+        >
           <FaGithub />
         </button>
       </div>

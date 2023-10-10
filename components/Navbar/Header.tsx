@@ -138,21 +138,19 @@ const Header = () => {
                       )}
                     </Menu.Item>
 
-                    {/* <Menu.Item>
+                    <Menu.Item>
                       {({ active }) => (
                         <a
                           onClick={logoutHandler}
-                          href="/login"
                           className={`block w-full whitespace-nowrap px-16 py-2 text-neutral-700 hover:bg-grey-500 hover:text-white active:bg-primary-600 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 dark:text-neutral-200 dark:hover:bg-neutral-600 ${
                             active && "bg-grey-500"
                           }`}
                           data-te-dropdown-item-ref
                         >
-                          <i className="text-gray-400 w-5 fa fa-user"></i>
                           <span className="hidden lg:inline ml-1">Logout</span>
                         </a>
                       )}
-                    </Menu.Item> */}
+                    </Menu.Item>
                   </Menu.Items>
                 </Menu>
               )}
@@ -217,13 +215,12 @@ const Header = () => {
                     >
                       Dashboard
                     </Link>
-                    {/* <Link
+                    <a
                       onClick={logoutHandler}
-                      href="/login"
                       className="my-1 text-base font-medium text-center text-gray-700 hover:text-blue-600 flex items-center"
                     >
                       Logout
-                    </Link> */}
+                    </a>
                   </>
                 )}
               </div>

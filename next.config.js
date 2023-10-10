@@ -2,7 +2,7 @@
 const nextConfig = {
   env: {
     MONGODB_URI:
-      "mongodb+srv://mari:GidbPnAiw3taEyEG@node-project.6mr8s0d.mongodb.net/next-e-commerce?retryWrites=true&w=majority",
+      "mongodb+srv://mari:GidbPnAiw3taEyEG@node-project.6mr8s0d.mongodb.net/?retryWrites=true&w=majority",
     // API_URL: "http://localhost:3000/",
     // NEXTAUTH_URL: "http://localhost:3000/",
     API_URL: "https://next-js-e-commerce-three-dusky.vercel.app",
