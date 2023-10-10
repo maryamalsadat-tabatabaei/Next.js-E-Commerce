@@ -6,7 +6,13 @@ import StarRatings from "react-star-ratings";
 import { CartContext } from "@/context/CartContext";
 import { useContext } from "react";
 
-const ProductItem = ({ product }: { product: Product }) => {
+const ProductItem = ({
+  product,
+  onSale = false,
+}: {
+  product: Product;
+  onSale?: boolean;
+}) => {
   const { addItemToCart } = useContext(CartContext);
   const addToCartHandler = () => {
     addItemToCart({
@@ -38,12 +44,17 @@ const ProductItem = ({ product }: { product: Product }) => {
               layout="fill"
               objectFit="contain"
             />
+            {onSale && (
+              <span className="absolute top-0 left-0 m-2 rounded-full bg-orange-700 px-2 text-center text-sm font-medium text-white">
+                40% OFF
+              </span>
+            )}
           </div>
         </div>
         <div className="lg:w-2/4">
           <div className="p-4">
             <Link
-              href={`/product/${product._id}`}
+              href={`/product/${product._id}?onSale=${onSale}`}
               className="hover:text-blue-600"
             >
               <h2 className="text-xl font-semibold mb-2">{product.name}</h2>
@@ -72,9 +83,24 @@ const ProductItem = ({ product }: { product: Product }) => {
         </div>
         <div className="lg:w-1/4 border-t lg:border-t-0 lg:border-l border-gray-200">
           <div className="p-5 text-center">
-            <span className="text-xl font-semibold text-black">
+            {/* <span className="text-xl font-semibold text-black">
               ${product.price}
-            </span>
+            </span> */}
+            {onSale ? (
+              <>
+                <span className="text-3xl font-bold text-slate-900">
+                  ${(product?.price * 0.6).toFixed()}
+                </span>
+
+                <span className="text-sm text-slate-900 line-through">
+                  ${(product?.price).toFixed()}
+                </span>
+              </>
+            ) : (
+              <span className="text-3xl font-bold text-slate-900">
+                ${product?.price}
+              </span>
+            )}
             <p className="text-green-500">Free Shipping</p>
             <div className="my-3">
               <button

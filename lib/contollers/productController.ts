@@ -41,7 +41,7 @@ export const getProducts = async (
     // }
 
     const apiFilters = new APIFilters(
-      ProductModel.find(),
+      ProductModel.find().sort({ createdAt: -1 }),
       req.query as CustomQuery
     )
       .search(["name", "description"])

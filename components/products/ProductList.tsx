@@ -12,7 +12,16 @@ interface Products {
   totalPages: number;
   filteredProductsCount: number;
 }
-export default function ProductList({ data }: { data: Products }) {
+export default function ProductList({
+  data,
+  onsaleProducts,
+}: {
+  data: Products;
+  onsaleProducts: Product[];
+}) {
+  const onsaleProductsList = onsaleProducts.map((product) =>
+    product._id.toString()
+  );
   return (
     // <main className="flex min-h-screen flex-col items-center justify-between p-24">
     <>
@@ -22,9 +31,19 @@ export default function ProductList({ data }: { data: Products }) {
             <Filters />
             <main className="md:w-2/3 lg:w-3/4 px-3">
               {data?.products?.length !== 0 ? (
-                data?.products?.map((product, index) => (
-                  <ProductItem key={index} product={product} />
-                ))
+                data?.products?.map((product, index) => {
+                  if (onsaleProductsList.includes(product._id.toString())) {
+                    return (
+                      <ProductItem
+                        key={index}
+                        product={product}
+                        onSale={true}
+                      />
+                    );
+                  } else {
+                    return <ProductItem key={index} product={product} />;
+                  }
+                })
               ) : (
                 <main className="flex min-h-screen text-lg font-semibold flex-col items-center justify-between p-24">
                   No product found

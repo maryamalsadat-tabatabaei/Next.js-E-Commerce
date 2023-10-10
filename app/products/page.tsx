@@ -33,6 +33,17 @@ const getProducts = async (searchParams: {
   return data;
 };
 
+const getOnSaleProducts = async () => {
+  const { data } = await axios.get(
+    `${process.env.API_URL}/api/products/least-popular`
+  );
+  if (!data.ok) {
+    console.log("Failed to fetch data");
+    // throw new Error("Failed to fetch data");
+  }
+  return data;
+};
+
 export default async function HomeProductsPage({
   searchParams,
 }: {
@@ -46,5 +57,9 @@ export default async function HomeProductsPage({
   };
 }) {
   const productData = await getProducts(searchParams);
-  return <ProductList data={productData} />;
+  const data = await getOnSaleProducts();
+
+  return (
+    <ProductList data={productData} onsaleProducts={data?.onsaleProducts} />
+  );
 }

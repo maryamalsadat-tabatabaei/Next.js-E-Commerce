@@ -102,7 +102,7 @@ export const getUsers = async (req: any, res: NextApiResponse) => {
     const usersCount = (await UserModel.countDocuments()) || 0;
 
     const apiFilters = new APIFilters(
-      UserModel.find(),
+      UserModel.find().sort({ createdAt: -1 }),
       req.query as CustomQuery
     ).pagination(numberPerPage, currentPage);
     const users = await apiFilters.execute();

@@ -3,14 +3,11 @@ import { CustomNextApiRequest } from "@/interfaces/user";
 import ErrorHandler from "../utils/errorHandler";
 import getRawBody from "raw-body";
 import Stripe from "stripe";
-import { CartItem } from "@/interfaces/cart";
 import { getCartItems } from "@/helpers/getCartItems";
 import { OrderModel } from "../models";
-import mongoose from "mongoose";
+import { Types } from "mongoose";
 import APIFilters from "../utils/APIFilters";
 import { CheckoutSession } from "@/interfaces/CheckoutSession";
-const { Schema } = mongoose;
-const ObjectId = mongoose.Types.ObjectId;
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
   apiVersion: "2023-08-16",
@@ -115,16 +112,23 @@ interface CustomQuery {
   [key: string]: string;
 }
 export const getOrders = async (req: any, res: NextApiResponse) => {
+  const userId = req?.user?._id;
   try {
     const numberPerPage = 2;
     let currentPage = Math.max(1, parseInt(req.query.page as string, 10)) || 1;
-    const ordersCount = (await OrderModel.countDocuments()) || 0;
 
     const apiFilters = new APIFilters(
-      OrderModel.find().populate("shippingInfo user"),
+      OrderModel.find({ user: userId })
+        .populate("shippingInfo user")
+        .sort({ createdAt: -1 }),
       req.query as CustomQuery
-    ).pagination(numberPerPage, currentPage);
-    const orders = await apiFilters.execute();
+    );
+    let orders = await apiFilters.execute();
+
+    const ordersCount = orders.length;
+    orders = await apiFilters
+      .pagination(numberPerPage, currentPage)
+      .query.clone();
 
     res.status(200).json({
       ordersCount,
@@ -209,4 +213,58 @@ export const canReview = async (
   res.status(200).json({
     canReview,
   });
+};
+
+export const getOrdersStats = async (
+  req: CustomNextApiRequest,
+  res: NextApiResponse,
+  next: Function
+) => {
+  const userId = req?.user?._id;
+
+  const today = new Date();
+  const lastYear = new Date(today);
+  lastYear.setFullYear(today.getFullYear() - 1);
+
+  try {
+    const orders = await OrderModel.aggregate([
+      {
+        $match: {
+          user: new Types.ObjectId(userId),
+          createdAt: { $gte: lastYear },
+          orderStatus: { $in: ["Processing", "Shipped", "Delivered"] },
+        },
+      },
+      {
+        $unwind: "$orderItems",
+      },
+      {
+        $project: {
+          month: { $month: "$createdAt" },
+          quantity: "$orderItems.quantity",
+        },
+      },
+      {
+        $group: {
+          _id: {
+            month: "$month",
+          },
+          totalQuantity: { $sum: "$quantity" },
+        },
+      },
+    ]);
+
+    const monthlyStats = orders.map((order) => ({
+      month: order._id.month,
+      totalQuantity: order.totalQuantity,
+    }));
+    console.log("monthlyStats", monthlyStats);
+
+    res.status(200).json({
+      ordersStats: monthlyStats,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 };

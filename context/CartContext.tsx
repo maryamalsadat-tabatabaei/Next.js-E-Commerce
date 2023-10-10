@@ -8,10 +8,16 @@ import {
 } from "react";
 import { CheckoutInformation, CartItem } from "@/interfaces/cart";
 import { useRouter } from "next/navigation";
-import { Document, Types } from "mongoose";
+import { Types } from "mongoose";
+import User from "@/interfaces/user";
+import { AuthContext } from "./AuthContext";
+import { useSession } from "next-auth/react";
 
 export interface CartContextProps {
-  cart: { cartItems?: CartItem[]; checkoutInfo?: CheckoutInformation };
+  cart: {
+    cartItems?: CartItem[];
+    checkoutInfo?: CheckoutInformation;
+  };
   addItemToCart: (product: CartItem) => void;
   deleteItemFromCart: (productId: Types.ObjectId) => void;
   clearCart: () => void;
@@ -28,17 +34,25 @@ const initialCartContext = {
 export const CartContext = createContext<CartContextProps>(initialCartContext);
 
 const CartProvider = ({ children }: { children: ReactNode }) => {
+  const { user, setUser } = useContext(AuthContext);
+  const { data } = useSession();
+
+  useEffect(() => {
+    if (data) {
+      setUser(data?.user as User | null);
+    }
+    setCartFromStorageToState();
+  }, [data, setUser]);
+
   const router = useRouter();
   const [cart, setCart] = useState<{ cartItems?: CartItem[] }>({
     cartItems: [],
   });
 
-  useEffect(() => {
-    setCartFromStorageToState();
-  }, []);
-
   const setCartFromStorageToState = () => {
-    const cartFromStorage = localStorage.getItem("cart");
+    const cartFromStorage = localStorage.getItem(
+      `cartItems_${user?._id || "unknown"}`
+    );
     setCart(cartFromStorage ? JSON.parse(cartFromStorage) : { cartItems: [] });
   };
 
@@ -54,10 +68,12 @@ const CartProvider = ({ children }: { children: ReactNode }) => {
     } else {
       updateCartItems = [...(cart?.cartItems || []), product];
     }
+
     localStorage.setItem(
-      "cart",
+      `cartItems_${user?._id || "unknown"}`,
       JSON.stringify({ cartItems: updateCartItems })
     );
+
     setCartFromStorageToState();
   };
   const deleteItemFromCart = (productId: Types.ObjectId) => {
@@ -65,14 +81,17 @@ const CartProvider = ({ children }: { children: ReactNode }) => {
       (item: CartItem) => item.productId !== productId
     );
     localStorage.setItem(
-      "cart",
+      `cartItems_${user?._id || "unknown"}`,
       JSON.stringify({ cartItems: updateCartItems })
     );
     setCartFromStorageToState();
   };
   const saveOnCheckout = (checkoutInfo: CheckoutInformation) => {
     const newCart = { ...cart, checkoutInfo };
-    localStorage.setItem("cart", JSON.stringify(newCart));
+    localStorage.setItem(
+      `cartItems_${user?._id || "unknown"}`,
+      JSON.stringify(newCart)
+    );
     setCartFromStorageToState();
     router.push("/shipping");
   };

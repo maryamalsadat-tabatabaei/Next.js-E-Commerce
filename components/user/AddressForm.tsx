@@ -34,18 +34,18 @@ const AddressForm = () => {
 
     if (!values.street) {
       errors.street = "street is required";
-    } else if (values.street.length > 15) {
-      errors.street = "Must be 15 characters or less";
+    } else if (values.street.length > 50) {
+      errors.street = "Must be 50 characters or less";
     }
     if (!values.city) {
       errors.city = "City is required";
-    } else if (values.city.length > 15) {
-      errors.city = "Must be 15 characters or less";
+    } else if (values.city.length > 30) {
+      errors.city = "Must be 30 characters or less";
     }
     if (!values.state) {
       errors.state = "State is required";
-    } else if (values.state.length > 15) {
-      errors.state = "Must be 15 characters or less";
+    } else if (values.state.length > 30) {
+      errors.state = "Must be 30 characters or less";
     }
     if (!values.zipCode) {
       errors.zipCode = "Zip code is required";
@@ -60,24 +60,6 @@ const AddressForm = () => {
     ) {
       errors.phoneNo = "Invalid Phone Number - +1XXXXXXXXXX";
     }
-    // if (!values.email) {
-    //   errors.email = "Email is required";
-    // } else if (!validator.isEmail(values.email)) {
-    //   errors.email = "Invalid email street";
-    // }
-
-    // if (!values.password) {
-    //   errors.password = "Password is required";
-    // } else if (!validator.isStrongPassword(values.password)) {
-    //   errors.password =
-    //     "Password must contain one Capital letter, Small Letter, Number & Special symbol";
-    // }
-
-    // if (!values.confirmPassword) {
-    //   errors.confirmPassword = "Confirm password is required";
-    // } else if (values.password !== values.confirmPassword) {
-    //   errors.confirmPassword = "Password does not match";
-    // }
 
     return errors;
   };

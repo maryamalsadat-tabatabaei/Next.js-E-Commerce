@@ -54,7 +54,7 @@ const ProductSlide = ({
         )}
       </div>
       <div className="mt-4 px-5 pb-5">
-        <Link href={`/product/${product._id}`}>
+        <Link href={`/product/${product._id}?onSale=${onSale}`}>
           <h5 className="text-base font-semibold tracking-tight text-slate-900">
             {product?.name}
           </h5>

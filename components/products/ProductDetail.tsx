@@ -8,7 +8,7 @@ import { useRef, useContext, useEffect } from "react";
 import { CartContext } from "@/context/CartContext";
 import ReviewForm from "../reviews/ReviewForm";
 import { FaShoppingBag, FaShoppingCart } from "react-icons/fa";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { OrderContext } from "@/context/OrderContext";
 import Reviews from "../reviews/Reviews";
 
@@ -16,14 +16,16 @@ const ProductDetail = ({
   product,
   reviewsCount,
   numberPerPage,
-  onSale = false,
 }: {
   product: Product;
   reviewsCount: number;
   numberPerPage: number;
-  onSale?: boolean;
 }) => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const onSale = searchParams?.get("onSale") || false;
+
   const { addItemToCart } = useContext(CartContext);
   const { canUserRivew, canReview } = useContext(OrderContext);
 
@@ -69,6 +71,7 @@ const ProductDetail = ({
       url: `/products/${product?._id}`,
     },
   ];
+
   return (
     <>
       <BreadCrumbs breadCrumbList={breadCrumbList} />
@@ -89,7 +92,7 @@ const ProductDetail = ({
                   width="340"
                   height="340"
                 />
-                {onSale && (
+                {onSale === "true" && (
                   <span className="absolute top-0 left-0 m-2 rounded-full bg-red-600 px-2 text-sm font-medium text-white">
                     40% OFF
                   </span>
@@ -144,7 +147,7 @@ const ProductDetail = ({
 
               <p className="mb-4">
                 {" "}
-                {onSale ? (
+                {onSale === "true" ? (
                   <>
                     <span className="text-3xl font-bold text-slate-900">
                       ${(product?.price * 0.6).toFixed()}

@@ -9,6 +9,7 @@ import Address, { FormAddress } from "@/interfaces/address";
 import { AuthContext } from "@/context/AuthContext";
 import { toast } from "react-toastify";
 import MapboxMap from "./AddressMap";
+import Modal from "../layouts/Modal";
 
 interface Country {
   name: string;
@@ -31,12 +32,12 @@ const UpdateAddress = ({
     updateAddress,
     deleteAddress,
   } = useContext(AuthContext);
-  console.log("adresssssssssssss", address);
+  const [showModal, setShowModal] = useState(false);
   const [location, setLocation] = useState<{ [x: string]: number }>({
     latitude: address?.location?.latitude,
     longitude: address?.location?.longitude,
   });
-  console.log("location", location);
+
   const countriesList: Country[] = Object.values(countries);
   const validateForm = (values: FormAddress) => {
     const errors: {
@@ -104,8 +105,14 @@ const UpdateAddress = ({
 
     updateAddress(addressId, values, location);
   };
+
+  const openModalHanlder = () => setShowModal(true);
+  const closeModalHanlder = () => setShowModal(false);
+
   const deleteHandler = (addressId: string) => {
+    // alert("Modal Confirmed");
     deleteAddress(addressId);
+    setShowModal(false);
   };
   const breadCrumbList = [
     {
@@ -307,12 +314,40 @@ const UpdateAddress = ({
                       </button>
 
                       <button
-                        type="submit"
+                        type="button"
                         className="my-2 px-4 py-2 text-center w-full inline-block text-white bg-red-600 border border-transparent rounded-md hover:bg-red-700"
-                        onClick={() => deleteHandler(addressId)}
+                        onClick={openModalHanlder}
                       >
                         Delete
                       </button>
+
+                      <Modal
+                        isOpen={showModal}
+                        onDismiss={closeModalHanlder}
+                        title="Delete Confirmation"
+                      >
+                        <div className="mt-4 flex flex-col justify-center items-center ">
+                          <h1 className="p-2 text-lg font-semibold">
+                            Are you sure to delete?
+                          </h1>
+                          <hr className="text-gray-300  w-full mt-8 mb-2" />
+                          <div className="flex justify-center items-center gap-10">
+                            <button
+                              className="px-4 py-2 bg-green-900 text-white rounded-lg"
+                              type="submit"
+                              onClick={() => deleteHandler(addressId)}
+                            >
+                              Confirm
+                            </button>
+                            <button
+                              className="px-4 py-2 bg-red-900 text-white rounded-lg"
+                              onClick={closeModalHanlder}
+                            >
+                              Dismiss
+                            </button>
+                          </div>
+                        </div>
+                      </Modal>
                     </div>
                   </Form>
                 )}

@@ -25,7 +25,9 @@ export const getAddresses = async (
   res: NextApiResponse
 ) => {
   try {
-    const addresses = await AddressModel.find({ user: req.user?._id });
+    const addresses = await AddressModel.find({ user: req.user?._id }).sort({
+      createdAt: -1,
+    });
     res.status(200).json({ addresses });
   } catch (error) {
     console.error(error);

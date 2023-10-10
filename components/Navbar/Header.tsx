@@ -15,7 +15,6 @@ import {
   FaShoppingCart,
   FaChevronUp,
   FaChevronDown,
-  FaUser,
 } from "react-icons/fa";
 import { AiOutlineClose } from "react-icons/ai";
 
@@ -33,7 +32,7 @@ const Header = () => {
     if (data) {
       setUser(data?.user as User | null);
     }
-  }, [data, setUser]);
+  }, [data]);
 
   const logoutHandler = () => {
     signOut();
@@ -139,7 +138,7 @@ const Header = () => {
                       )}
                     </Menu.Item>
 
-                    <Menu.Item>
+                    {/* <Menu.Item>
                       {({ active }) => (
                         <a
                           onClick={logoutHandler}
@@ -153,7 +152,7 @@ const Header = () => {
                           <span className="hidden lg:inline ml-1">Logout</span>
                         </a>
                       )}
-                    </Menu.Item>
+                    </Menu.Item> */}
                   </Menu.Items>
                 </Menu>
               )}
@@ -218,13 +217,13 @@ const Header = () => {
                     >
                       Dashboard
                     </Link>
-                    <Link
+                    {/* <Link
                       onClick={logoutHandler}
                       href="/login"
                       className="my-1 text-base font-medium text-center text-gray-700 hover:text-blue-600 flex items-center"
                     >
                       Logout
-                    </Link>
+                    </Link> */}
                   </>
                 )}
               </div>

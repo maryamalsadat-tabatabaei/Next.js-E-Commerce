@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { getCookieName } from "@/helpers/getCookieName";
 import queryString from "query-string";
 import OrderList from "@/components/order/OrderList";
+import OrdersTab from "@/components/order/OrdersTab";
 
 const getOrders = async ({
   searchParams,
@@ -35,12 +36,36 @@ const getOrders = async ({
   return data;
 };
 
+const getOrdersStats = async () => {
+  const nextCookies = cookies();
+  const cookieName = getCookieName();
+  const nextAuthSessionToken = nextCookies.get(cookieName);
+
+  const { data } = await axios.get(
+    `${process.env.API_URL}/api/order/orders-stats`,
+    {
+      headers: {
+        Cookie: `${nextAuthSessionToken?.name}=${nextAuthSessionToken?.value}`,
+      },
+    }
+  );
+  if (!data.ok) {
+    console.log("Failed to fetch data");
+    // throw new Error("Failed to fetch data");
+  }
+
+  return data;
+};
+
 export default async function OrderListPage({
   searchParams,
 }: {
   searchParams: { page: string };
 }) {
   const orders = await getOrders({ searchParams });
+  const data = await getOrdersStats();
 
-  return <OrderList orders={orders} />;
+  // return <OrdersChartModal ordersStats={data?.ordersStats} />;
+  // return <OrderList orders={orders} />;
+  return <OrdersTab ordersStats={data?.ordersStats} orders={orders} />;
 }

@@ -14,13 +14,13 @@ export function GlobalProvider({ children }: { children: ReactNode }) {
     <>
       <ToastContainer position="bottom-right" />
       <AuthProvider>
-        <CartProvider>
-          <OrderProvider>
-            <ProductProvider>
-              <SessionProvider>{children}</SessionProvider>
-            </ProductProvider>
-          </OrderProvider>
-        </CartProvider>
+        <SessionProvider>
+          <CartProvider>
+            <OrderProvider>
+              <ProductProvider>{children}</ProductProvider>
+            </OrderProvider>
+          </CartProvider>
+        </SessionProvider>
       </AuthProvider>
     </>
   );

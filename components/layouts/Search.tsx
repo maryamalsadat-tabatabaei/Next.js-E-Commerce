@@ -19,10 +19,10 @@ const Search = () => {
   return (
     <form
       onSubmit={submitHandler}
-      className="flex flex-nowrap items-center w-full order-last md:order-none mt-5 md:mt-0 md:w-2/4 lg:w-2/4"
+      className="flex flex-col md:flex-row items-center w-full order-last md:order-none mt-5 md:mt-0 md:w-2/4 lg:w-2/4"
     >
       <input
-        className="flex-grow appearance-none border border-gray-200 bg-gray-100 rounded-md mr-2 py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400"
+        className="flex-grow appearance-none border border-gray-200 bg-gray-100 rounded-md mr-2 mb-2 md:mb-0 py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400"
         type="text"
         value={keyword}
         onChange={(e) => setKeyword(e.target.value)}

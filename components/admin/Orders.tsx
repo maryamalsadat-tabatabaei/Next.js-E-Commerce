@@ -4,9 +4,10 @@ import { FaPencilAlt, FaTrash } from "react-icons/fa";
 import CustomPagination from "../layouts/Pagination";
 import Order from "@/interfaces/order";
 import { Types } from "mongoose";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { OrderContext } from "@/context/OrderContext";
+import Modal from "../layouts/Modal";
 
 interface OrdersType {
   orders: Order[];
@@ -16,6 +17,7 @@ interface OrdersType {
 const Orders = ({ orders }: { orders: OrdersType }) => {
   const { error, clearErrors, deleteOrder, deleted, setDeleted } =
     useContext(OrderContext);
+  const [showModal, setShowModal] = useState(false);
   useEffect(() => {
     if (deleted) {
       toast.success("Order Deleted");
@@ -26,8 +28,14 @@ const Orders = ({ orders }: { orders: OrdersType }) => {
       clearErrors();
     }
   }, [error, deleted, clearErrors, setDeleted]);
+
+  const openModalHanlder = () => setShowModal(true);
+  const closeModalHanlder = () => setShowModal(false);
+
   const deleteHandler = (orderId: Types.ObjectId) => {
+    // alert("Modal Confirmed");
     deleteOrder(orderId);
+    setShowModal(false);
   };
   return (
     <div className="relative overflow-x-auto shadow-md rounded-lg">
@@ -67,11 +75,38 @@ const Orders = ({ orders }: { orders: OrdersType }) => {
                       <FaPencilAlt />
                     </Link>
                     <a
-                      onClick={() => deleteHandler(order?._id)}
+                      onClick={openModalHanlder}
                       className="px-2 py-2 inline-block text-red-600 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 cursor-pointer"
                     >
                       <FaTrash />
                     </a>
+                    <Modal
+                      isOpen={showModal}
+                      onDismiss={closeModalHanlder}
+                      title="Delete Confirmation"
+                    >
+                      <div className="mt-4 flex flex-col justify-center items-center ">
+                        <h1 className="p-2 text-lg font-semibold">
+                          Are you sure to delete?
+                        </h1>
+                        <hr className="text-gray-300  w-full mt-8 mb-2" />
+                        <div className="flex justify-center items-center gap-10">
+                          <button
+                            className="px-4 py-2 bg-green-900 text-white rounded-lg"
+                            type="submit"
+                            onClick={() => deleteHandler(order?._id)}
+                          >
+                            Confirm
+                          </button>
+                          <button
+                            className="px-4 py-2 bg-red-900 text-white rounded-lg"
+                            onClick={closeModalHanlder}
+                          >
+                            Dismiss
+                          </button>
+                        </div>
+                      </div>
+                    </Modal>
                   </div>
                 </td>
               </tr>
